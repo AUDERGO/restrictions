@@ -13,62 +13,143 @@ def analyser_restriction_rules(text):
     phrases = split_phrases(text)
 
     res = {
-        "debout": 0,
-        "retract": 0,
-        "frontal": 0,
-        "tous": 0,
-        "limitation": 0,
-        "engin": 0
+
+        # ENGINS
+        "engin_debout": 0,
+        "engin_frontal": 0,
+        "engin_retract": 0,
+        "engin_tous": 0,
+        "limitation_temps_conduite": 0,
+        "Engin": 0,
+
+        # AUTRES
+        "Charge": 0,
+        "Posture": 0,
+
+        "epaule": 0,
+        "dos": 0,
+        "cervicales": 0,
+        "membres_inf": 0,
+        "poignet": 0,
+        "repetitif": 0,
+
+        "horaire": 0,
+
+        "total": 0
     }
 
-    # ✅ INDENTATION CORRECTE
+    # -------------------------
+    # ANALYSE PAR PHRASE
+    # -------------------------
     for phrase in phrases:
         phrase = phrase.strip()
 
         has_neg = match_any(PATTERNS["negation"], phrase)
 
-        # -------------------------
-        # 1. DETECTION PAR TYPES (PRIORITAIRE)
-        # -------------------------
+        # =========================
+        # 1. ENGINS
+        # =========================
+
         found_type = False
 
-        if match_any(PATTERNS["frontal"], phrase):
+        if match_any(PATTERNS["engin_frontal"], phrase):
             if has_neg:
-                res["frontal"] = 1
-                res["engin"] = 1
+                res["engin_frontal"] = 1
             found_type = True
 
-        if match_any(PATTERNS["retract"], phrase):
+        if match_any(PATTERNS["engin_retract"], phrase):
             if has_neg:
-                res["retract"] = 1
-                res["engin"] = 1
+                res["engin_retract"] = 1
             found_type = True
 
-        if match_any(PATTERNS["debout"], phrase):
+        if match_any(PATTERNS["engin_debout"], phrase):
             if has_neg:
-                res["debout"] = 1
-                res["engin"] = 1
+                res["engin_debout"] = 1
             found_type = True
 
-        # -------------------------
-        # 2. BLOCAGE GLOBAL
-        # -------------------------
-        if not found_type and match_any(PATTERNS["tous"], phrase):
-            res["tous"] = 1
-            res["engin"] = 1
+        # bloc global
+        if not found_type and match_any(PATTERNS["engin_tous"], phrase):
+            res["engin_tous"] = 1
 
-        # -------------------------
-        # 3. LIMITATION
-        # -------------------------
-        if match_any(PATTERNS["limitation"], phrase):
-            res["limitation"] = 1
-            res["engin"] = 1
+        # limitation
+        if match_any(PATTERNS["limitation_temps_conduite"], phrase):
+            res["limitation_temps_conduite"] = 1
 
-        # -------------------------
-        # 4. AUTORISATION
-        # -------------------------
-        if match_any(PATTERNS["autorisation"], phrase):
-            res["engin"] = 1
+        # condition conduite
+        if match_any(PATTERNS["condition_conduite"], phrase):
+            res["Engin"] = 1
 
-    # ✅ RETURN À LA FIN
+        # =========================
+        # 2. CHARGES
+        # =========================
+        if match_any(PATTERNS["charge"], phrase):
+            res["Charge"] = 1
+
+        # =========================
+        # 3. POSTURE DETAIL
+        # =========================
+
+        if match_any(PATTERNS["epaule"], phrase):
+            res["epaule"] = 1
+
+        if match_any(PATTERNS["dos"], phrase):
+            res["dos"] = 1
+
+        if match_any(PATTERNS["cervicales"], phrase):
+            res["cervicales"] = 1
+
+        if match_any(PATTERNS["membres_inf"], phrase):
+            res["membres_inf"] = 1
+
+        if match_any(PATTERNS["poignet"], phrase):
+            res["poignet"] = 1
+
+        if match_any(PATTERNS["repetitif"], phrase):
+            res["repetitif"] = 1
+
+        # =========================
+        # 4. POSTURE GLOBAL
+        # =========================
+        if match_any(PATTERNS["posture"], phrase):
+            res["Posture"] = 1
+
+        # =========================
+        # 5. HORAIRE
+        # =========================
+        if match_any(PATTERNS["horaire"], phrase):
+            res["horaire"] = 1
+
+    # -------------------------
+    # AGREGATION
+    # -------------------------
+
+    # Engin global
+    res["Engin"] = max(
+        res["engin_debout"],
+        res["engin_frontal"],
+        res["engin_retract"],
+        res["engin_tous"],
+        res["limitation_temps_conduite"]
+    )
+
+    # Posture global
+    res["Posture"] = max(
+        res["Posture"],
+        res["epaule"],
+        res["dos"],
+        res["cervicales"],
+        res["membres_inf"],
+        res["poignet"],
+        res["repetitif"]
+    )
+
+    # Total score
+    res["total"] = (
+        res["Engin"]
+        + res["Charge"]
+        + res["Posture"]
+        + res["horaire"]
+    )
+
     return res
+    
