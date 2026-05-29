@@ -1,23 +1,35 @@
 PATTERNS = {
 
     "debout": [
-        r"v?0?8",
-        r"debou?t",
-        r"epl",
-        r"ome"
+               
+        r"[vV]?08",                 # v08, 08
+        r"[vV]?epl",                # epl, vpl
+        r"[vV]?ome",                # ome
+        r"debou?t"
     ],
 
     "retract": [
-        r"retrac\w*",         # ✅ couvre retract, retractable, retrac...
+        r"[vV]?r.?tract\w*",        # retract, rtract, r.tract…
+        r"[vV]?lat\.?ra\w*",        # lat.ra / latra
+        r"chariot\w*\s*[\w\s]*assis"
+        
     ],
 
     "frontal": [
-        r"fronta\w*",         # ✅ couvre frontal, frontale
+        r"[vV]?fronta\w*",          # frontal / frontale
+        r"chariot\w*\s*[\w\s]*assis",
+        r"marche\s*arr?i?[eè]r?e",
+        r"en\s*marche\s*arr?i?[eè]r?e",
+        r"recul\w*"
+
     ],
 
     "tous": [
         r"pas de conduite(?!.*(frontal|retract|debout))",
         r"sans conduite",
+        r"pas de conduite de chariot automoteur port\w",
+        r"ponctuel\w*",
+        r"exceptionnel\w*",
         r"contre.?indication.*conduite"
     ],
 
@@ -26,8 +38,6 @@ PATTERNS = {
         r"\d+\s*%",
         r"limite\w*",
         r"max\w*",
-        r"ponctuel\w*",
-        r"exceptionnel\w*"
     ],
 
     "negation": [
