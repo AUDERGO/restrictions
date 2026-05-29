@@ -56,7 +56,7 @@ PATTERNS = {
     # -------------------------
     # CHARGES
     # -------------------------
-    "charge": [
+    "Charge": [
         r"port de charges?",
         r"manutention",
         r"charges? lourdes?",
@@ -70,7 +70,7 @@ PATTERNS = {
     # -------------------------
     # POSTURE GLOBALE
     # -------------------------
-    "posture": [
+    "Posture": [
         r"posture",
         
     ],
