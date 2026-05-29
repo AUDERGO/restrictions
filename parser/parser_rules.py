@@ -21,44 +21,54 @@ def analyser_restriction_rules(text):
         "engin": 0
     }
 
-   for phrase in phrases:
-    phrase = phrase.strip()
+    # ✅ INDENTATION CORRECTE
+    for phrase in phrases:
+        phrase = phrase.strip()
 
-    has_neg = match_any(PATTERNS["negation"], phrase)
+        has_neg = match_any(PATTERNS["negation"], phrase)
 
-    # -------------------------
-    # 1. DETECTION PAR TYPES (PRIORITAIRE)
-    # -------------------------
-    found_type = False
+        # -------------------------
+        # 1. DETECTION PAR TYPES (PRIORITAIRE)
+        # -------------------------
+        found_type = False
 
-    if match_any(PATTERNS["frontal"], phrase):
-        if has_neg:
-            res["frontal"] = 1
+        if match_any(PATTERNS["frontal"], phrase):
+            if has_neg:
+                res["frontal"] = 1
+                res["engin"] = 1
+            found_type = True
+
+        if match_any(PATTERNS["retract"], phrase):
+            if has_neg:
+                res["retract"] = 1
+                res["engin"] = 1
+            found_type = True
+
+        if match_any(PATTERNS["debout"], phrase):
+            if has_neg:
+                res["debout"] = 1
+                res["engin"] = 1
+            found_type = True
+
+        # -------------------------
+        # 2. BLOCAGE GLOBAL
+        # -------------------------
+        if not found_type and match_any(PATTERNS["tous"], phrase):
+            res["tous"] = 1
             res["engin"] = 1
-        found_type = True
 
-    if match_any(PATTERNS["retract"], phrase):
-        if has_neg:
-            res["retract"] = 1
+        # -------------------------
+        # 3. LIMITATION
+        # -------------------------
+        if match_any(PATTERNS["limitation"], phrase):
+            res["limitation"] = 1
             res["engin"] = 1
-        found_type = True
 
-    if match_any(PATTERNS["debout"], phrase):
-        if has_neg:
-            res["debout"] = 1
+        # -------------------------
+        # 4. AUTORISATION
+        # -------------------------
+        if match_any(PATTERNS["autorisation"], phrase):
             res["engin"] = 1
-        found_type = True
 
-    # -------------------------
-    # 2. BLOCAGE GLOBAL (SEULEMENT SI AUCUN TYPE)
-    # -------------------------
-    if not found_type and match_any(PATTERNS["tous"], phrase):
-        res["tous"] = 1
-        res["engin"] = 1
-
-    # -------------------------
-    # 3. LIMITATION
-    # -------------------------
-    if match_any(PATTERNS["limitation"], phrase):
-        
-  return res
+    # ✅ RETURN À LA FIN
+    return res
