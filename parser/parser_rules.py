@@ -24,7 +24,15 @@ def analyser_restriction_rules(text):
     for phrase in phrases:
         phrase = phrase.strip()
 
+        # Blocage global uniquement si aucun type précisé
         if match_any(PATTERNS["tous"], phrase):
+
+        # si on mentionne un type -> PAS blocage global
+        if not (
+            match_any(PATTERNS["frontal"], phrase)
+            or match_any(PATTERNS["retract"], phrase)
+            or match_any(PATTERNS["debout"], phrase)
+        ):
             res["tous"] = 1
             res["engin"] = 1
             continue
