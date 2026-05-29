@@ -28,29 +28,41 @@ PATTERNS = {
         r"pas de conduite(?!.*(frontal|retract|debout))",
         r"sans conduite",
         r"pas de conduite de chariot automoteur port\w",
-        r"ponctuel\w*",
         r"exceptionnel\w*",
+        r"\ r"occasionnel\w*",    r"\d+\s*%",
+        r"reste\s*ponctuel",
+        r"doit\s*rester\s*exceptionnel",
         r"contre.?indication.*conduite"
     ],
 
     "limitation": [
         r"\d+\s*h",
         r"\d+\s*%",
-        r"limite\w*",
+        r"\d+\s*heures?",
+        r"semaine\s+avec",
+        r"semaine\s+sans"
+        r"\b\d+h\b",
         r"max\w*",
-    ],
-
+        r"maximum",
+        r"limite\w*",
+        
+    ]
+    
     "negation": [
-        r"pas",
+        r"\bpas\b",
         r"contre",
-        r"eviter",
-        r"interdit"
+        r"interdit",
+        r"eviter"
+
     ],
 
     "autorisation": [
         r"autorise\w*",
         r"apte\w*",
-        r"possible",
-        r"peut\s+conduire"
-    ]
+        r"validation",
+        r"valide",
+        r"peut\s+reprendre",
+        r"possible"
+ ]
+ 
 }
