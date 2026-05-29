@@ -32,7 +32,7 @@ PATTERNS = {
         r"sans conduite",
         r"pas de conduite de chariot automoteur port\w",
         r"exceptionnel\w*",
-        r"\ r"occasionnel\w*",
+        r"occasionnel\w*",
         r"ponctuel\w*",
         r"\d+\s*%",
         r"reste\s*ponctuel",
@@ -61,7 +61,7 @@ PATTERNS = {
         r"manutention",
         r"charges? lourdes?",
         r"\d+\s*kg",
-        r"kg"
+        r"kg",
         r"pas de port de charges?",
         r"eviction du port de charges?",
         r"contre.?indication.*charges?"
