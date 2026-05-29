@@ -1,25 +1,22 @@
 PATTERNS = {
 
     "debout": [
-        r"[v]?0?8",
-        r"[v]?e?p[l1]",
-        r"[o0]?m[e3]",
+        r"v?0?8",
         r"debou?t",
-        r"chariot\w*\s*\w*debou?t"
+        r"epl",
+        r"ome"
     ],
 
     "retract": [
-        r"r[ée]?trac?t\w*",
-        r"chariot\w*\s*\w*retract"
+        r"retrac\w*",         # ✅ couvre retract, retractable, retrac...
     ],
 
     "frontal": [
-        r"frontal\w*",
-        r"chariot\w*\s*\w*assis"
+        r"fronta\w*",         # ✅ couvre frontal, frontale
     ],
 
     "tous": [
-        r"pas de conduite",
+        r"pas de conduite(?!.*(frontal|retract|debout))",
         r"sans conduite",
         r"contre.?indication.*conduite"
     ],
