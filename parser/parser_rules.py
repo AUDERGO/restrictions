@@ -33,6 +33,26 @@ def is_restriction(phrase):
     ]
     return any(m in phrase for m in mots)
 
+def debug_phrase(phrase):
+
+    phrase = normalize(phrase)
+
+    result = {}
+
+    for key, patterns in PATTERNS.items():
+
+        matches = []
+
+        for p in patterns:
+            if re.search(p, phrase):
+                matches.append(p)
+
+        if matches:
+            result[key] = matches
+
+    return result
+
+
 def analyser_restriction_rules(text):
 
     text = normalize(text)
