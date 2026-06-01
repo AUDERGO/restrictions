@@ -142,7 +142,13 @@ def analyser_restriction_rules(text):
 
         # limitation
         if match_any(PATTERNS["limitation_temps_conduite"], phrase):
-            res["limitation_temps_conduite"] = 1
+            if match_any(PATTERNS["engin_frontal"], phrase) or \
+               match_any(PATTERNS["engin_retract"], phrase) or \
+               match_any(PATTERNS["engin_debout"], phrase) or \
+               match_any(PATTERNS["engin_tous"], phrase):
+        
+                res["limitation_temps_conduite"] = 1
+
 
         
         # =========================
