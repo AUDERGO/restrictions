@@ -58,7 +58,7 @@ PATTERNS = {
         r"charges? lourdes?",
         r"\d+\s*kg",
         r"kg",
-        r"lourd\w*"
+        r"lourd\w*",
         r"pas de port de charges?",
         r"eviction du port de charges?",
         r"contre.?indication.*charges?"
