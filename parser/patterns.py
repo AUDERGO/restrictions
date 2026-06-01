@@ -44,7 +44,6 @@ PATTERNS = {
         r"\b\d+h\b",
         r"max\w*",
         r"maximum",
-        r"limite\w*",
         r"semaine\s+avec",
         r"semaine\s+sans"
     
