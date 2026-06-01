@@ -121,8 +121,11 @@ def analyser_restriction_rules(text):
         # 4. CHARGE
         # -------------------------
 
-        if match_any(PATTERNS["charge"], phrase):
-            if (has_neg or is_restriction(phrase)) and not has_autorisation:
+       if match_any(PATTERNS["charge"], phrase):
+           if (has_neg or has_restriction) and not has_autorisation:
+               res["charge"] = 1
+
+            elif match_any([r"lourd\w*"], phrase) and not has_autorisation:
                 res["charge"] = 1
                 
         # -------------------------
@@ -142,8 +145,12 @@ def analyser_restriction_rules(text):
                 res["cervicales"] = 1
 
         if match_any(PATTERNS["membres_inf"], phrase): 
-            if (has_neg or is_restriction(phrase)) and not has_autorisation:
+            if (has_neg or has_restriction) and not has_autorisation:
                 res["membres_inf"] = 1
+
+            if "chariot" in phrase:
+                res["engin_debout"] = 1
+                
 
         if match_any(PATTERNS["poignet"], phrase):
             if (has_neg or is_restriction(phrase)) and not has_autorisation:
@@ -184,9 +191,11 @@ def analyser_restriction_rules(text):
         res["repetitif"]
     )
     
-    if res["membres_inf"] == 1:
+    if res["membres_inf"] == 1 and (
+        res["engin_debout"] == 1 or
+        res["limitation_temps_conduite"] == 1
+    ):
         res["engin_debout"] = 1
-        res["Engin"] = 1
 
     # Total score
     res["total"] = (
