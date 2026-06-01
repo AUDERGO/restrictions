@@ -107,8 +107,8 @@ def analyser_restriction_rules(text):
         # =========================
         # 4. POSTURE GLOBAL
         # =========================
-        if match_any(PATTERNS["Posture"], phrase):
-            res["Posture"] = 1
+        if match_any(PATTERNS["posture"], phrase):
+            res["posture"] = 1
 
         # =========================
         # 5. HORAIRE
@@ -130,8 +130,8 @@ def analyser_restriction_rules(text):
     )
 
     # Posture global
-    res["Posture"] = max(
-        res["Posture"],
+    res["posture"] = max(
+        res["posture"],
         res["epaule"],
         res["dos"],
         res["cervicales"],
@@ -144,7 +144,7 @@ def analyser_restriction_rules(text):
     res["total"] = (
         res["Engin"]
         + res["charge"]
-        + res["Posture"]
+        + res["posture"]
         + res["horaire"]
     )
 
