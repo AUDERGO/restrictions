@@ -121,10 +121,9 @@ def analyser_restriction_rules(text):
         # 4. CHARGE
         # -------------------------
 
-       if match_any(PATTERNS["charge"], phrase):
-           if (has_neg or has_restriction) and not has_autorisation:
-               res["charge"] = 1
-
+        if match_any(PATTERNS["charge"], phrase):
+            if (has_neg or has_restriction) and not has_autorisation:
+                res["charge"] = 1
             elif match_any([r"lourd\w*"], phrase) and not has_autorisation:
                 res["charge"] = 1
                 
