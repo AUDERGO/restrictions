@@ -79,7 +79,7 @@ def analyser_restriction_rules(text):
         # =========================
         # 2. CHARGES
         # =========================
-        if match_any(PATTERNS["charge"], phrase):
+        if match_any(PATTERNS["Charge"], phrase):
             res["Charge"] = 1
 
         # =========================
@@ -107,7 +107,7 @@ def analyser_restriction_rules(text):
         # =========================
         # 4. POSTURE GLOBAL
         # =========================
-        if match_any(PATTERNS["posture"], phrase):
+        if match_any(PATTERNS["Posture"], phrase):
             res["Posture"] = 1
 
         # =========================
