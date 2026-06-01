@@ -15,7 +15,7 @@ def match_any(patterns, text):
 
 def is_restriction(phrase):
     mots = [
-       "pas", "contre", "eviter", "limite",
+       "pas", "contre", "eviter", "limite","limiter","limitation",
         "interdit", "sans", "reduction","restriction"
     ]
     return any(m in phrase for m in mots)
