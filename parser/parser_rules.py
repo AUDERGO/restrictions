@@ -102,17 +102,17 @@ def analyser_restriction_rules(text):
         found_type = False
 
         if match_any(PATTERNS["engin_frontal"], phrase):
-            if has_neg:
+            if has_neg or is_restriction(phrase):
                 res["engin_frontal"] = 1
             found_type = True
 
         if match_any(PATTERNS["engin_retract"], phrase):
-            if has_neg:
+            if has_neg or is_restriction(phrase):
                 res["engin_retract"] = 1
             found_type = True
 
         if match_any(PATTERNS["engin_debout"], phrase):
-            if has_neg:
+            if has_neg or is_restriction(phrase):
                 res["engin_debout"] = 1
             found_type = True
 
@@ -140,7 +140,6 @@ def analyser_restriction_rules(text):
         if match_any(PATTERNS["epaule"], phrase):
             if is_restriction(phrase):
                 res["epaule"] = 1
-         
 
         if match_any(PATTERNS["dos"], phrase):
             if is_restriction(phrase):
@@ -166,7 +165,8 @@ def analyser_restriction_rules(text):
         # 4. POSTURE GLOBAL
         # =========================
         if match_any(PATTERNS["posture"], phrase):
-            res["posture"] = 1
+            if is_restriction(phrase):
+                res["posture"] = 1
 
         # =========================
         # 5. HORAIRE
