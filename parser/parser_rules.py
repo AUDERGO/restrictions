@@ -4,18 +4,10 @@ from .utils import normalize, split_phrases
 
 def is_hors_perimetre(text):
     mots_exclusion = [
-        "covid",
-        "sanitaire",
-        "masque",
-        "distanciation",
-        "lavage des mains",
-        "desinfection",
-        "sars",
-        "virus"
+        "covid", "sanitaire", "masque", "distanciation",
+        "lavage des mains", "desinfection", "sars", "virus"
     ]
-
     text = text.lower()
-
     return any(mot in text for mot in mots_exclusion)
 
 def match_any(patterns, text):
@@ -23,38 +15,25 @@ def match_any(patterns, text):
 
 def is_restriction(phrase):
     mots = [
-        "pas",
-        "contre",
-        "eviter",
-        "limite",
-        "interdit",
-        "sans",
-        "reduction"
+       "pas", "contre", "eviter", "limite",
+        "interdit", "sans", "reduction"
     ]
     return any(m in phrase for m in mots)
 
 def debug_phrase(phrase):
-
     phrase = normalize(phrase)
-
     result = {}
-
     for key, patterns in PATTERNS.items():
-
         matches = []
-
         for p in patterns:
             if re.search(p, phrase):
                 matches.append(p)
-
         if matches:
             result[key] = matches
-
     return result
 
 
 def analyser_restriction_rules(text):
-
     text = normalize(text)
 
     # -------------------------
@@ -89,40 +68,45 @@ def analyser_restriction_rules(text):
         has_autorisation = match_any(PATTERNS["autorisation"], phrase)
         has_restriction = is_restriction(phrase)
 
-
-        # -------------------------
         # REGLE CLE
-        # -------------------------
-        is_contrainte = (has_restriction or has_neg) and not has_autorisation
+        is_contrainte = (has_neg or has_restriction) and not has_autorisation
 
 
         # -------------------------
         # 3. ENGINS
         # -------------------------
-        engin_detecte = False
+        
+        engin_present = (
+            match_any(PATTERNS["engin_frontal"], phrase) or
+            match_any(PATTERNS["engin_retract"], phrase) or
+            match_any(PATTERNS["engin_debout"], phrase) or
+            match_any(PATTERNS["engin_tous"], phrase)
+        )
 
         if match_any(PATTERNS["engin_frontal"], phrase):
-            engin_detecte = True
-            if is_contrainte:
+            if has_autorisation and not is_restriction(phrase):
+                pass  # on laisse à 0
+            elif is_contrainte and not has_autorisation:
                 res["engin_frontal"] = 1
 
         if match_any(PATTERNS["engin_retract"], phrase):
-            engin_detecte = True
-            if is_contrainte:
+            if has_autorisation and not is_restriction(phrase):
+                pass  # on laisse à 0
+            elif is_contrainte and not has_autorisation:
                 res["engin_retract"] = 1
 
         if match_any(PATTERNS["engin_debout"], phrase):
-            engin_detecte = True
-            if is_contrainte:
+            if has_autorisation and not is_restriction(phrase):
+                pass  # on laisse à 0
+            elif is_contrainte and not has_autorisation:
                 res["engin_debout"] = 1
 
         if match_any(PATTERNS["engin_tous"], phrase):
-            engin_detecte = True
             if is_contrainte:
                 res["engin_tous"] = 1
 
-        # limitation uniquement si engin présent
-        if engin_detecte and match_any(PATTERNS["limitation_temps_conduite"], phrase):
+        # limitation uniquement si engin présent ET contrainte                
+         if engin_present and match_any(PATTERNS["limitation_temps_conduite"], phrase):
             if is_contrainte:
                 res["limitation_temps_conduite"] = 1
 
@@ -130,32 +114,40 @@ def analyser_restriction_rules(text):
         # -------------------------
         # 4. CHARGE
         # -------------------------
-        if match_any(PATTERNS["charge"], phrase):
-            if is_contrainte:
-                res["charge"] = 1
 
-        
+        if match_any(PATTERNS["charge"], phrase):
+            if (has_neg or is_restriction(phrase)) and not has_autorisation:
+                res["charge"] = 1
+                
         # -------------------------
         # 5. POSTURE DETAIL
         # -------------------------
-        if match_any(PATTERNS["epaule"], phrase) and is_contrainte:
-            res["epaule"] = 1
+                
+        if match_any(PATTERNS["epaule"], phrase):
+            if (has_neg or is_restriction(phrase)) and not has_autorisation:
+                res["epaule"] = 1
 
-        if match_any(PATTERNS["dos"], phrase) and is_contrainte:
-            res["dos"] = 1
+        if match_any(PATTERNS["dos"], phrase):
+            if (has_neg or is_restriction(phrase)) and not has_autorisation:
+                res["dos"] = 1
 
-        if match_any(PATTERNS["cervicales"], phrase) and is_contrainte:
-            res["cervicales"] = 1
+        if match_any(PATTERNS["cervicales"], phrase):
+            if (has_neg or is_restriction(phrase)) and not has_autorisation:
+                res["cervicales"] = 1
 
-        if match_any(PATTERNS["membres_inf"], phrase) and is_contrainte:
-            res["membres_inf"] = 1
+        if match_any(PATTERNS["membres_inf"], phrase): 
+            if (has_neg or is_restriction(phrase)) and not has_autorisation:
+                res["membres_inf"] = 1
 
-        if match_any(PATTERNS["poignet"], phrase) and is_contrainte:
-            res["poignet"] = 1
+        if match_any(PATTERNS["poignet"], phrase):
+            if (has_neg or is_restriction(phrase)) and not has_autorisation:
+                res["poignet"] = 1
 
-        if match_any(PATTERNS["repetitif"], phrase) and is_contrainte:
-            res["repetitif"] = 1
+        if match_any(PATTERNS["repetitif"], phrase):
+            if (has_neg or is_restriction(phrase)) and not has_autorisation:
+                res["repetitif"] = 1
 
+        
         # -------------------------
         # 6. HORAIRE
         # -------------------------
