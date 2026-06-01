@@ -75,10 +75,7 @@ def analyser_restriction_rules(text):
         if match_any(PATTERNS["limitation_temps_conduite"], phrase):
             res["limitation_temps_conduite"] = 1
 
-        # condition conduite
-        if match_any(PATTERNS["condition_conduite"], phrase):
-            res["Engin"] = 1
-
+        
         # =========================
         # 2. CHARGES
         # =========================
