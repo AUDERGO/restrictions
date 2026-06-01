@@ -43,7 +43,6 @@ PATTERNS = {
     "limitation_temps_conduite": [
         r"\d+\s*h",
         r"\d+\s*heures?",
-        r"\d+\s*%",
         r"\b\d+h\b",
         r"max\w*",
         r"maximum",
@@ -62,18 +61,12 @@ PATTERNS = {
         r"charges? lourdes?",
         r"\d+\s*kg",
         r"kg",
+        r"lourd\w*"
         r"pas de port de charges?",
         r"eviction du port de charges?",
         r"contre.?indication.*charges?"
     ],
-
-    # -------------------------
-    # POSTURE GLOBALE
-    # -------------------------
-    "posture": [
-        r"posture",
-        
-    ],
+    
 
     # -------------------------
     # ÉPAULES
@@ -125,7 +118,7 @@ PATTERNS = {
     ],
 
     # -------------------------
-    # POIGNET / MAIN
+    # POIGNET
     # -------------------------
     "poignet": [
         r"poignet",
@@ -142,7 +135,7 @@ PATTERNS = {
     ],
 
     # -------------------------
-    # HORAIRE / ORGANISATION
+    # HORAIRE
     # -------------------------
     "horaire": [
         r"mi[-\s]?temps",
@@ -152,6 +145,8 @@ PATTERNS = {
         r"travail de nuit",
         r"2\*8",
         r"alternance",
+        r"temps\s*de\s*travail\s*a?\s*\d+\s*%",
+        r"\d+\s*%\s*du\s*temps",
         r"semaine\s+avec",
         r"semaine\s+sans"
     ],
