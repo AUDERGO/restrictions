@@ -16,7 +16,7 @@ def match_any(patterns, text):
 def is_restriction(phrase):
     mots = [
        "pas", "contre", "eviter", "limite",
-        "interdit", "sans", "reduction"
+        "interdit", "sans", "reduction","restriction"
     ]
     return any(m in phrase for m in mots)
 
@@ -183,6 +183,10 @@ def analyser_restriction_rules(text):
         res["poignet"],
         res["repetitif"]
     )
+    
+    if res["membres_inf"] == 1:
+        res["engin_debout"] = 1
+        res["Engin"] = 1
 
     # Total score
     res["total"] = (
