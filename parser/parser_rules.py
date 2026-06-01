@@ -23,8 +23,8 @@ def analyser_restriction_rules(text):
         "Engin": 0,
 
         # AUTRES
-        "Charge": 0,
-        "Posture": 0,
+        "charge": 0,
+        "posture": 0,
 
         "epaule": 0,
         "dos": 0,
@@ -79,8 +79,8 @@ def analyser_restriction_rules(text):
         # =========================
         # 2. CHARGES
         # =========================
-        if match_any(PATTERNS["Charge"], phrase):
-            res["Charge"] = 1
+        if match_any(PATTERNS["charge"], phrase):
+            res["charge"] = 1
 
         # =========================
         # 3. POSTURE DETAIL
@@ -143,7 +143,7 @@ def analyser_restriction_rules(text):
     # Total score
     res["total"] = (
         res["Engin"]
-        + res["Charge"]
+        + res["charge"]
         + res["Posture"]
         + res["horaire"]
     )
