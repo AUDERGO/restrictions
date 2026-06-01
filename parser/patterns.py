@@ -129,9 +129,7 @@ PATTERNS = {
     # -------------------------
     "poignet": [
         r"poignet",
-        r"main",
-        r"pronosupination",
-        r"poignee"
+        r"pronosupination"
     ],
 
     # -------------------------
