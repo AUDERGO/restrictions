@@ -75,7 +75,10 @@ def analyser_restriction_rules(text):
         # -------------------------
         # 3. ENGINS
         # -------------------------
-        
+        autorisation_engin_debout = False
+        autorisation_engin_frontal = False
+        autorisation_engin_retract = False
+
         engin_present = (
             match_any(PATTERNS["engin_frontal"], phrase) or
             match_any(PATTERNS["engin_retract"], phrase) or
@@ -84,22 +87,24 @@ def analyser_restriction_rules(text):
         )
 
         if match_any(PATTERNS["engin_frontal"], phrase):
-            if has_autorisation and not is_restriction(phrase):
-                pass  # on laisse à 0
-            elif is_contrainte and not has_autorisation:
+            if has_autorisation:
+                autorisation_engin_frontal = True
+            elif is_contrainte and not autorisation_engin_frontal:
                 res["engin_frontal"] = 1
+              
 
         if match_any(PATTERNS["engin_retract"], phrase):
-            if has_autorisation and not is_restriction(phrase):
-                pass  # on laisse à 0
-            elif is_contrainte and not has_autorisation:
+            if has_autorisation:
+                autorisation_engin_retract = True
+            elif is_contrainte and not autorisation_engin_retract:
                 res["engin_retract"] = 1
 
         if match_any(PATTERNS["engin_debout"], phrase):
-            if has_autorisation and not is_restriction(phrase):
-                pass  # on laisse à 0
-            elif is_contrainte and not has_autorisation:
+            if has_autorisation:
+                autorisation_engin_debout = True
+            elif is_contrainte and not autorisation_engin_debout:
                 res["engin_debout"] = 1
+
 
         if match_any(PATTERNS["engin_tous"], phrase):
             if is_contrainte:
