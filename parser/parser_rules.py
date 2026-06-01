@@ -2,14 +2,63 @@ import re
 from .patterns import PATTERNS
 from .utils import normalize, split_phrases
 
+def is_hors_perimetre(text):
+    mots_exclusion = [
+        "covid",
+        "sanitaire",
+        "masque",
+        "distanciation",
+        "lavage des mains",
+        "desinfection",
+        "sars",
+        "virus"
+    ]
+
+    text = text.lower()
+
+    return any(mot in text for mot in mots_exclusion)
 
 def match_any(patterns, text):
     return any(re.search(p, text) for p in patterns)
 
+def is_restriction(phrase):
+    mots = [
+        "pas",
+        "contre",
+        "eviter",
+        "limite",
+        "interdit",
+        "sans",
+        "reduction"
+    ]
+    return any(m in phrase for m in mots)
 
 def analyser_restriction_rules(text):
 
     text = normalize(text)
+
+    # 🚫 EXCLUSION
+    if is_hors_perimetre(text):
+        return {
+            "engin_debout": 0,
+            "engin_frontal": 0,
+            "engin_retract": 0,
+            "engin_tous": 0,
+            "limitation_temps_conduite": 0,
+            "Engin": 0,
+            "charge": 0,
+            "posture": 0,
+            "epaule": 0,
+            "dos": 0,
+            "cervicales": 0,
+            "membres_inf": 0,
+            "poignet": 0,
+            "repetitif": 0,
+            "horaire": 0,
+            "total": 0
+        }
+
+
     phrases = split_phrases(text)
 
     res = {
@@ -80,29 +129,38 @@ def analyser_restriction_rules(text):
         # 2. CHARGES
         # =========================
         if match_any(PATTERNS["charge"], phrase):
-            res["charge"] = 1
+            if is_restriction(phrase):
+                res["charge"] = 1
+                   
 
         # =========================
         # 3. POSTURE DETAIL
         # =========================
 
         if match_any(PATTERNS["epaule"], phrase):
-            res["epaule"] = 1
+            if is_restriction(phrase):
+                res["epaule"] = 1
+         
 
         if match_any(PATTERNS["dos"], phrase):
-            res["dos"] = 1
+            if is_restriction(phrase):
+                res["dos"] = 1
 
         if match_any(PATTERNS["cervicales"], phrase):
-            res["cervicales"] = 1
+            if is_restriction(phrase):
+                res["cervicales"] = 1
 
         if match_any(PATTERNS["membres_inf"], phrase):
-            res["membres_inf"] = 1
+            if is_restriction(phrase):
+                res["membres_inf"] = 1
 
         if match_any(PATTERNS["poignet"], phrase):
-            res["poignet"] = 1
+            if is_restriction(phrase):
+                res["poignet"] = 1
 
         if match_any(PATTERNS["repetitif"], phrase):
-            res["repetitif"] = 1
+            if is_restriction(phrase):
+                res["repetitif"] = 1
 
         # =========================
         # 4. POSTURE GLOBAL
