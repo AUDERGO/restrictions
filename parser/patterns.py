@@ -46,6 +46,7 @@ PATTERNS = {
         r"maximum",
         r"semaine\s+avec",
         r"semaine\s+sans"
+       
     
     ],
 
