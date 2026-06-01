@@ -4,7 +4,7 @@ PATTERNS = {
     # ENGINS
     # -------------------------
     "engin_debout": [
-        r"v?0?8",
+        r"[vV]08",
         r"epl",
         r"ome",
         r"debou?t",
@@ -29,12 +29,10 @@ PATTERNS = {
 
     "engin_tous": [
         r"pas de conduite(?!.*(frontal|retract|debout))",
-        r"sans conduite",
         r"pas de conduite de chariot automoteur port\w",
         r"exceptionnel\w*",
         r"occasionnel\w*",
         r"ponctuel\w*",
-        r"\d+\s*%",
         r"reste\s*ponctuel",
         r"doit\s*rester\s*exceptionnel",
         r"contre.?indication.*conduite"
