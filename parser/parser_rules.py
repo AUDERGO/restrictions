@@ -105,10 +105,11 @@ def analyser_restriction_rules(text):
             if is_contrainte:
                 res["engin_tous"] = 1
 
-        # limitation uniquement si engin présent ET contrainte                
-         if engin_present and match_any(PATTERNS["limitation_temps_conduite"], phrase):
+        # limitation seulement si engin ET contrainte
+        if engin_present and match_any(PATTERNS["limitation_temps_conduite"], phrase):
             if is_contrainte:
                 res["limitation_temps_conduite"] = 1
+
 
 
         # -------------------------
