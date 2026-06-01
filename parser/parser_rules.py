@@ -161,12 +161,7 @@ def analyser_restriction_rules(text):
             if is_restriction(phrase):
                 res["repetitif"] = 1
 
-        # =========================
-        # 4. POSTURE GLOBAL
-        # =========================
-        if match_any(PATTERNS["posture"], phrase):
-            if is_restriction(phrase):
-                res["posture"] = 1
+       
 
         # =========================
         # 5. HORAIRE
@@ -189,7 +184,6 @@ def analyser_restriction_rules(text):
 
     # Posture global
     res["posture"] = max(
-        res["posture"],
         res["epaule"],
         res["dos"],
         res["cervicales"],
