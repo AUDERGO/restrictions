@@ -151,7 +151,7 @@ PATTERNS = {
         r"\d+\s*%\s*du\s*temps",
         r"semaine\s+avec",
         r"semaine\s+sans",
-        r"\bMTT\b"
+        r"mtt"
     ],
 
     # -------------------------
