@@ -30,6 +30,7 @@ PATTERNS = {
     "engin_tous": [
         r"pas de conduite(?!.*(frontal|retract|debout))",
         r"pas de conduite de chariot automoteur port\w",
+        r"sans conduite de chariot automoteur port\w",
         r"exceptionnel\w*",
         r"occasionnel\w*",
         r"ponctuel\w*",
@@ -88,7 +89,8 @@ PATTERNS = {
         r"flexion",
         r"torsion",
         r"ant[eé]flexion",
-        r"rotation"
+        r"rotation",
+        r"pench\w*\s*(en\s*avant)?"
     ],
 
     # -------------------------
@@ -144,11 +146,11 @@ PATTERNS = {
         r"horaire",
         r"travail de nuit",
         r"2\*8",
-        r"alternance",
         r"temps\s*de\s*travail\s*a?\s*\d+\s*%",
         r"\d+\s*%\s*du\s*temps",
         r"semaine\s+avec",
-        r"semaine\s+sans"
+        r"semaine\s+sans",
+        r"MTT"
     ],
 
     # -------------------------
