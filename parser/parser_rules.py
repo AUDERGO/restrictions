@@ -87,6 +87,8 @@ def analyser_restriction_rules(text):
         "epaule","dos","cervicales","membres_inf","poignet","repetitif",
         "horaire","total"
     ]}
+    
+    res["poids"] = None
 
     # -------------------------
     # ANALYSE PAR PHRASE
@@ -139,14 +141,24 @@ def analyser_restriction_rules(text):
                     res["limitation_temps_conduite"] = 1
 
         # -------------------------
-        # CHARGE
+        # CHARGE  #extraction poids
         # -------------------------
         if match_any(PATTERNS["charge"], phrase):
             if has_neg or has_restriction:
                 res["charge"] = 1
             elif match_any([r"lourd\w*", r"\d+\s*kg"], phrase):
                 res["charge"] = 1
-
+        
+        # extraction poids
+        match_poids = re.search(r"(\d+)\s*kg", phrase)
+        if match_poids:
+            poids_valeur = int(match_poids.group(1))
+            
+            if res["poids"] is None:
+                res["poids"] = poids_valeur
+            else:
+                res["poids"] = min(res["poids"], poids_valeur)
+        
         # -------------------------
         # POSTURE DETAIL
         # -------------------------
