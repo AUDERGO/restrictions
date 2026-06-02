@@ -65,7 +65,7 @@ def analyser_restriction_rules(text):
 
     text = normalize(text)
 
-    # 🚫 EXCLUSION
+    # EXCLUSION
     if is_hors_perimetre(text):
         return {k: 0 for k in [
             "engin_debout","engin_frontal","engin_retract","engin_tous",
@@ -101,26 +101,33 @@ def analyser_restriction_rules(text):
 
         is_contrainte = (has_neg or has_restriction)
 
-        # ✅ règle simple : autorisation annule
-        if has_autorisation:
-            continue
 
         # -------------------------
         # ENGINS
         # -------------------------
-        if match_any(PATTERNS["engin_frontal"], phrase) and is_contrainte:
-            res["engin_frontal"] = 1
 
-        if match_any(PATTERNS["engin_retract"], phrase) and is_contrainte:
-            res["engin_retract"] = 1
+        if match_any(PATTERNS["engin_frontal"], phrase):
+            if has_autorisation:
+                pass
+            elif is_contrainte:
+                res["engin_frontal"] = 1
 
-        if match_any(PATTERNS["engin_debout"], phrase) and is_contrainte:
-            res["engin_debout"] = 1
+        if match_any(PATTERNS["engin_retract"], phrase):
+            if has_autorisation:
+                pass
+            elif is_contrainte:
+                res["engin_retract"] = 1
 
-        if match_any(PATTERNS["engin_tous"], phrase) and is_contrainte:
-            res["engin_tous"] = 1
+        if match_any(PATTERNS["engin_debout"], phrase):
+            if has_autorisation:
+                pass
+            elif is_contrainte:
+                res["engin_debout"] = 1
+        
+        if match_any(PATTERNS["engin_tous"], phrase):
+            if is_contrainte:
+                res["engin_tous"] = 1
 
-        # ✅ limitation conduite
         if match_any(PATTERNS["limitation_temps_conduite"], phrase):
 
             if match_any(PATTERNS["engin_frontal"], phrase) or \
@@ -135,34 +142,39 @@ def analyser_restriction_rules(text):
         # CHARGE
         # -------------------------
         if match_any(PATTERNS["charge"], phrase):
-
-            if is_contrainte:
+            
+            if is_contrainte and not has_autorisation:
                 res["charge"] = 1
-
-            # ✅ cas implicite métier
+                
             elif match_any([r"lourd\w*"], phrase):
                 res["charge"] = 1
 
         # -------------------------
         # POSTURE DETAIL
         # -------------------------
-        if match_any(PATTERNS["epaule"], phrase) and is_contrainte:
-            res["epaule"] = 1
+        if match_any(PATTERNS["epaule"], phrase):
+            if has_neg or has_restriction:
+                res["epaule"] = 1
 
-        if match_any(PATTERNS["dos"], phrase) and is_contrainte:
-            res["dos"] = 1
+        if match_any(PATTERNS["dos"], phrase):
+            if has_neg or has_restriction:
+                res["dos"] = 1
 
-        if match_any(PATTERNS["cervicales"], phrase) and is_contrainte:
-            res["cervicales"] = 1
+        if match_any(PATTERNS["cervicales"], phrase):
+            if has_neg or has_restriction:
+                res["cervicales"] = 1
 
-        if match_any(PATTERNS["membres_inf"], phrase) and is_contrainte:
-            res["membres_inf"] = 1
+        if match_any(PATTERNS["membres_inf"], phrase):
+            if has_neg or has_restriction:
+                res["membres_inf"] = 1
 
-        if match_any(PATTERNS["poignet"], phrase) and is_contrainte:
-            res["poignet"] = 1
+        if match_any(PATTERNS["poignet"], phrase):
+            if has_neg or has_restriction:
+                res["poignet"] = 1
 
-        if match_any(PATTERNS["repetitif"], phrase) and is_contrainte:
-            res["repetitif"] = 1
+        if match_any(PATTERNS["repetitif"], phrase):
+            if has_neg or has_restriction:
+                res["repetitif"] = 1
 
         # -------------------------
         # HORAIRE
@@ -175,7 +187,6 @@ def analyser_restriction_rules(text):
     # AGREGATION
     # -------------------------
 
-    # ✅ posture → engin debout
     if res["membres_inf"] == 1:
         res["engin_debout"] = 1
 
