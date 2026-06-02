@@ -74,7 +74,8 @@ PATTERNS = {
         r"epaules",
         r"bras en elevation",
         r"au dessus des epaules",
-        r"bras au dessus"
+        r"bras au dessus",
+        r"coude"
     ],
 
     # -------------------------
@@ -82,7 +83,7 @@ PATTERNS = {
     # -------------------------
     "dos": [
         r"rachis",
-        r"dos",
+        r"\bdos\b",
         r"tronc",
         r"flexion",
         r"torsion",
@@ -95,7 +96,7 @@ PATTERNS = {
     # -------------------------
     "cervicales": [
         r"cervical",
-        r"cou",
+        r"\bcou\b,
         r"nuque"
     ],
 
@@ -120,7 +121,8 @@ PATTERNS = {
     # -------------------------
     "poignet": [
         r"poignet",
-        r"pronosupination"
+        r"pronosupination",
+        r"\bmain\b
     ],
 
     # -------------------------
