@@ -163,8 +163,10 @@ def analyser_restriction_rules(text):
                 res["cervicales"] = 1
 
         if match_any(PATTERNS["membres_inf"], phrase):
-            if has_neg or has_restriction:
+            if is_contrainte:
                 res["membres_inf"] = 1
+            elif "alternance" in phrase:
+                 res["membres_inf"] = 1
 
         if match_any(PATTERNS["poignet"], phrase):
             if has_neg or has_restriction:
