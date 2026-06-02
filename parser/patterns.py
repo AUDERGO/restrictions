@@ -96,7 +96,7 @@ PATTERNS = {
     # -------------------------
     "cervicales": [
         r"cervical",
-        r"\bcou\b,
+        r"\bcou\b",
         r"nuque"
     ],
 
@@ -122,7 +122,7 @@ PATTERNS = {
     "poignet": [
         r"poignet",
         r"pronosupination",
-        r"\bmain\b
+        r"\bmain\b"
     ],
 
     # -------------------------
