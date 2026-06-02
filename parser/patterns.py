@@ -143,6 +143,7 @@ PATTERNS = {
         r"mi[-\s]?temps",
         r"temps\s*partiel",
         r"demi[-\s]?journee",
+        r"demi[-\s]?session\w",
         r"horaire",
         r"travail de nuit",
         r"2\*8",
