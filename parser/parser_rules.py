@@ -80,15 +80,22 @@ def analyser_restriction_rules(text):
     # -------------------------
     # INIT
     # -------------------------
-    res = {k: 0 for k in [
+    
+    res = {}
+    colonnes = [
         "engin_debout","engin_frontal","engin_retract","engin_tous",
         "limitation_temps_conduite","Engin",
-        "charge","posture",
+        "charge","poids","posture",
         "epaule","dos","cervicales","membres_inf","poignet","repetitif",
         "horaire","total"
-    ]}
+    ]
     
-    res["poids"] = None
+    for col in colonnes:
+        if col == "poids":
+            res[col] = None
+        else:
+            res[col] = 0
+
 
     # -------------------------
     # ANALYSE PAR PHRASE
