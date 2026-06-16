@@ -1,0 +1,111 @@
+import streamlit as st
+import pandas as pd
+import sys
+import os
+import subprocess
+
+# =============================
+# CONFIG APP
+# =============================
+st.set_page_config(page_title="Parser Restrictions", layout="wide")
+
+st.title("Analyse des restrictions médicales")
+
+# =============================
+# CLONAGE REPO (si absent)
+# =============================
+REPO_URL = "https://github.com/AUDERGO/restrictions.git"
+REPO_DIR = "restrictions"
+
+if not os.path.exists(REPO_DIR):
+    st.info("📥 Clonage du repository GitHub...")
+    subprocess.run(["git", "clone", REPO_URL])
+
+sys.path.append(REPO_DIR)
+
+# =============================
+# IMPORT DES MODULES
+# =============================
+try:
+    from parser.parser_hybrid import analyser_restriction
+    from parser.parser_rules import debug_phrase
+except Exception as e:
+    st.error(f"Erreur import modules : {e}")
+    st.stop()
+
+# =============================
+# SECTION : UPLOAD EXCEL
+# =============================
+st.header("📂 Traitement fichier Excel")
+
+uploaded_file = st.file_uploader(
+    "Charge ton fichier Excel",
+    type=["xlsx"]
+)
+
+if uploaded_file:
+    df = pd.read_excel(uploaded_file)
+    st.success("✅ Fichier chargé")
+
+    st.write("Colonnes détectées :")
+    st.write(df.columns.tolist())
+
+    # Sélection colonne
+    text_col = st.selectbox(
+        "Choisir la colonne contenant le texte",
+        df.columns
+    )
+
+    if st.button("🚀 Lancer l'extraction"):
+        with st.spinner("Traitement en cours..."):
+
+            df_result = df[text_col].apply(analyser_restriction).apply(pd.Series)
+            df_final = pd.concat([df, df_result], axis=1)
+
+            st.success("✅ Extraction terminée")
+
+            st.dataframe(df_final.head())
+
+            # Export
+            output_file = "resultat_parser.xlsx"
+            df_final.to_excel(output_file, index=False)
+
+            with open(output_file, "rb") as f:
+                st.download_button(
+                    "📥 Télécharger le fichier résultat",
+                    f,
+                    file_name=output_file
+                )
+
+# =============================
+# SECTION DEBUG (IMPORTANT)
+# =============================
+st.header("🧪 Mode DEBUG")
+
+default_text = """préconisation d'éviction du port de charge > 5 kg et l'élévation des bras au dessus des épaules.
+Le travail coude au corps dans la majorité des activités est recommandé.
+Reprise à mi-temps thérapeutique en demi sessions quotidiennes.
+Soumis à prescription du médecin traitant."""
+
+debug_input = st.text_area(
+    "Texte à analyser",
+    value=default_text,
+    height=200
+)
+
+if st.button("🔎 Lancer DEBUG"):
+    st.subheader("🔎 Patterns détectés")
+
+    try:
+        debug_output = debug_phrase(debug_input)
+        st.json(debug_output)
+    except Exception as e:
+        st.error(f"Erreur debug_phrase : {e}")
+
+    st.subheader("📊 Résultat parser")
+
+    try:
+        result = analyser_restriction(debug_input)
+        st.json(result)
+    except Exception as e:
+        st.error(f"Erreur analyser_restriction : {e}")
