@@ -52,9 +52,28 @@ if uploaded_file:
             df_result = df[text_col].apply(analyser_restriction).apply(pd.Series)
             df_final = pd.concat([df, df_result], axis=1)
 
+            # =============================
+            # NETTOYAGE DES COLONNES
+            # =============================
+
+            # Colonnes à garder
+            colonnes_base = ["Manager", "Matricule", "Nom", "Date de visite", "Précision"]
+
+            # Colonnes ajoutées par le parser
+            colonnes_parser = df_result.columns.tolist()
+
+            # Liste finale
+            colonnes_finales = colonnes_base + colonnes_parser
+
+            # Garde uniquement ces colonnes
+            df_final = df_final[colonnes_finales]
+
+            # Supprimer l'heure si datetime
+            df_final["Date de visite"] = pd.to_datetime(df_final["Date de visite"], errors="coerce").dt.date
+
             st.success("✅ Extraction terminée")
 
-            st.dataframe(df_final.head())
+            st.dataframe(df_final, use_container_width=True)
 
             # Export
             output_file = "resultat_parser.xlsx"
