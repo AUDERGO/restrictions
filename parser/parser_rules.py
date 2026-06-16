@@ -114,7 +114,7 @@ def analyser_restriction_rules(text):
         # -------------------------
         # ENGINS
         # -------------------------
-
+        
         # ✅ mapping propre
         engin_map = {
             "engin_frontal": PATTERNS["engin_frontal"],
@@ -122,21 +122,30 @@ def analyser_restriction_rules(text):
             "engin_debout": PATTERNS["engin_debout"],
         }
 
-        for nom_engin, patterns_engin in engin_map.items():
+        # ✅ découpage local de la phrase
+        sous_phrases = re.split(r",|;| et ", phrase)
 
-            if match_any(patterns_engin, phrase):
+        for sp in sous_phrases:
 
-                # ✅ autorisation locale (UNIQUEMENT si elle concerne cet engin)
-                 autorisation_locale = (
-                    match_any(PATTERNS["autorisation"], phrase)
-                    and match_any(patterns_engin, phrase)
-                )
+            sp = sp.strip()
 
-                if autorisation_locale:
-                    pass  # on n'interdit pas
+            has_neg_sp = match_any(PATTERNS["negation"], sp)
+            has_autorisation_sp = match_any(PATTERNS["autorisation"], sp)
+            has_restriction_sp = is_restriction(sp)
 
-                elif has_neg or has_restriction:
-                    res[nom_engin] = 1    
+            is_contrainte_sp = has_neg_sp or has_restriction_sp
+
+            for nom_engin, patterns_engin in engin_map.items():
+
+                if match_any(patterns_engin, sp):
+
+                    # ✅ autorisation locale (sur la sous-phrase seulement)
+                    if has_autorisation_sp:
+                        continue
+
+                    elif is_contrainte_sp:
+                        res[nom_engin] = 1
+
         
         # === ANCIEN CODE ENGINS (désactivé) ===
         """           
