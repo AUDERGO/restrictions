@@ -72,10 +72,6 @@ if uploaded_file:
 # =============================
 st.header("🧪 Mode DEBUG")
 
-df_result = pd.DataFrame([result])
-st.dataframe(df_result, use_container_width=True)
-
-
 debug_input = st.text_area(
     "Saisir un texte à analyser",
     height=200
@@ -93,9 +89,9 @@ if st.button("🔎 Lancer DEBUG"):
                 df_result.columns = ["Variable", "Valeur"]
 
                 st.dataframe(df_result, use_container_width=True)
+
             else:
                 st.write(result)
 
         except Exception as e:
             st.error(f"Erreur : {e}")
-
