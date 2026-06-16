@@ -81,31 +81,51 @@ if uploaded_file:
 # SECTION DEBUG (IMPORTANT)
 # =============================
 st.header("🧪 Mode DEBUG")
+st.dataframe(df_result, use_container_width=True)
 
-default_text = """préconisation d'éviction du port de charge > 5 kg et l'élévation des bras au dessus des épaules.
-Le travail coude au corps dans la majorité des activités est recommandé.
-Reprise à mi-temps thérapeutique en demi sessions quotidiennes.
-Soumis à prescription du médecin traitant."""
 
 debug_input = st.text_area(
-    "Texte à analyser",
-    value=default_text,
-    height=200
+    "Saisir texte à analyser",
+    height=200,
+    placeholder="Ex : saisir ici une restriction médicale..."
 )
 
 if st.button("🔎 Lancer DEBUG"):
-    st.subheader("🔎 Patterns détectés")
+    if debug_input.strip() == "":
+        st.warning("⚠️ Merci de saisir un texte avant de lancer le debug")
+    else:
+        st.subheader("🔎 Patterns détectés")
 
-    try:
-        debug_output = debug_phrase(debug_input)
-        st.json(debug_output)
-    except Exception as e:
-        st.error(f"Erreur debug_phrase : {e}")
+        try:
+            debug_output = debug_phrase(debug_input)
 
-    st.subheader("📊 Résultat parser")
+            # affichage tableau
+            if isinstance(debug_output, dict):
+                df_debug = pd.DataFrame(
+                    list(debug_output.items()),
+                    columns=["Pattern", "Valeur"]
+                )
+                st.dataframe(df_debug)
+            else:
+                st.write(debug_output)
 
-    try:
-        result = analyser_restriction(debug_input)
-        st.json(result)
-    except Exception as e:
-        st.error(f"Erreur analyser_restriction : {e}")
+        except Exception as e:
+            st.error(f"Erreur debug_phrase : {e}")
+
+        st.subheader("📊 Résultat parser")
+
+        try:
+            result = analyser_restriction(debug_input)
+
+            # affichage tableau propre
+            if isinstance(result, dict):
+                df_result = pd.DataFrame([result])
+                df_result = df_result.T.reset_index()
+                df_result.columns = ["Variable", "Valeur"]
+
+                st.dataframe(df_result)
+            else:
+                st.write(result)
+
+        except Exception as e:
+            st.error(f"Erreur analyser_restriction : {e}")
