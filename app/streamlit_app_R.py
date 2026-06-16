@@ -1,6 +1,7 @@
 import sys
 import os
 import streamlit as st
+import pandas as pd
 
 # Ajoute le dossier racine du projet au path
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
@@ -70,6 +71,8 @@ if uploaded_file:
 # SECTION DEBUG (IMPORTANT)
 # =============================
 st.header("🧪 Mode DEBUG")
+
+df_result = pd.DataFrame([result])
 st.dataframe(df_result, use_container_width=True)
 
 
@@ -83,38 +86,15 @@ if st.button("🔎 Lancer DEBUG"):
     if debug_input.strip() == "":
         st.warning("⚠️ Merci de saisir un texte avant de lancer le debug")
     else:
-        st.subheader("🔎 Patterns détectés")
-
-        try:
-            debug_output = debug_phrase(debug_input)
-
-            # affichage tableau
-            if isinstance(debug_output, dict):
-                df_debug = pd.DataFrame(
-                    list(debug_output.items()),
-                    columns=["Pattern", "Valeur"]
-                )
-                st.dataframe(df_debug)
-            else:
-                st.write(debug_output)
-
-        except Exception as e:
-            st.error(f"Erreur debug_phrase : {e}")
-
         st.subheader("📊 Résultat parser")
 
         try:
             result = analyser_restriction(debug_input)
 
-            # affichage tableau propre
-            if isinstance(result, dict):
-                df_result = pd.DataFrame([result])
-                df_result = df_result.T.reset_index()
-                df_result.columns = ["Variable", "Valeur"]
+            df_result = pd.DataFrame([result]).T.reset_index()
+            df_result.columns = ["Variable", "Valeur"]
 
-                st.dataframe(df_result)
-            else:
-                st.write(result)
+            st.dataframe(df_result, use_container_width=True)
 
         except Exception as e:
             st.error(f"Erreur analyser_restriction : {e}")
