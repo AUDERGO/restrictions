@@ -123,7 +123,7 @@ def analyser_restriction_rules(text):
         }
 
         # ✅ découpage local de la phrase
-        sous_phrases = re.split(r",|;| et ", phrase)
+        sous_phrases = re.split(r",|;", phrase)
 
         for sp in sous_phrases:
 
