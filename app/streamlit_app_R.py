@@ -82,6 +82,20 @@ if st.button("🔎 Lancer DEBUG"):
         st.warning("⚠️ Merci de saisir un texte avant de lancer le debug")
     else:
         try:
+            # ===== 1. DEBUG PATTERNS =====
+            st.subheader("🔎 Patterns détectés")
+
+            debug_output = debug_phrase(debug_input)
+
+            # affichage lisible
+            if isinstance(debug_output, dict):
+                st.code(str(debug_output), language="python")
+            else:
+                st.write(debug_output)
+
+            # ===== 2. RESULTAT PARSER =====
+            st.subheader("📊 Résultat parser")
+
             result = analyser_restriction(debug_input)
 
             if isinstance(result, dict):
@@ -89,7 +103,6 @@ if st.button("🔎 Lancer DEBUG"):
                 df_result.columns = ["Variable", "Valeur"]
 
                 st.dataframe(df_result, use_container_width=True)
-
             else:
                 st.write(result)
 
