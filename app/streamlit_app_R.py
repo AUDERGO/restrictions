@@ -89,7 +89,13 @@ if st.button("🔎 Lancer DEBUG"):
 
             # affichage lisible
             if isinstance(debug_output, dict):
-                st.code(str(debug_output), language="python")
+                df_debug = pd.DataFrame(
+                    [(k, ", ".join(v)) for k, v in debug_output.items()],
+                    columns=["Catégorie", "Termes détectés"]
+                )
+
+                st.dataframe(df_debug, use_container_width=True)
+
             else:
                 st.write(debug_output)
 
