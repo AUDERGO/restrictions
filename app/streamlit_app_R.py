@@ -77,9 +77,8 @@ st.dataframe(df_result, use_container_width=True)
 
 
 debug_input = st.text_area(
-    "Saisir texte à analyser",
-    height=200,
-    placeholder="Ex : saisir ici une restriction médicale..."
+    "Saisir un texte à analyser",
+    height=200
 )
 
 if st.button("🔎 Lancer DEBUG"):
@@ -89,21 +88,14 @@ if st.button("🔎 Lancer DEBUG"):
         try:
             result = analyser_restriction(debug_input)
 
-            st.subheader("📊 Résultat parser")
-
-            # DEBUG (très utile)
-            st.write("Type de sortie :", type(result))
-
             if isinstance(result, dict):
                 df_result = pd.DataFrame([result]).T.reset_index()
                 df_result.columns = ["Variable", "Valeur"]
 
                 st.dataframe(df_result, use_container_width=True)
-
             else:
-                st.warning("⚠️ Le parser n'a pas retourné un dictionnaire")
                 st.write(result)
 
         except Exception as e:
-            st.error(f"Erreur analyser_restriction : {e}")
+            st.error(f"Erreur : {e}")
 
