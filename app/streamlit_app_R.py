@@ -75,10 +75,21 @@ if uploaded_file:
 
             st.dataframe(df_final, use_container_width=True)
 
+            # =============================
+            # Création du fichier à télécharger
+            # =============================
+        
+            from datetime import datetime
+
+            timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
+
+            # Nom du fichier avec date + heure
+            output_file = f"resultat_parser_{timestamp}.xlsx"
+
             # Export
-            output_file = "resultat_parser.xlsx"
             df_final.to_excel(output_file, index=False)
 
+            # Bouton téléchargement
             with open(output_file, "rb") as f:
                 st.download_button(
                     "📥 Télécharger le fichier résultat",
