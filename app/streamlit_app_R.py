@@ -1,7 +1,8 @@
-import streamlit as st
-import pandas as pd
 import sys
 import os
+
+# Ajoute le dossier racine du projet au path
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 
 # =============================
 # CONFIG APP
@@ -9,18 +10,6 @@ import os
 st.set_page_config(page_title="Parser Restrictions", layout="wide")
 
 st.title("Analyse des restrictions médicales")
-
-# =============================
-# CLONAGE REPO (si absent)
-# =============================
-REPO_URL = "https://github.com/AUDERGO/restrictions.git"
-REPO_DIR = "restrictions"
-
-if not os.path.exists(REPO_DIR):
-    st.info("📥 Clonage du repository GitHub...")
-    subprocess.run(["git", "clone", REPO_URL])
-
-sys.path.append(REPO_DIR)
 
 # =============================
 # IMPORT DES MODULES
