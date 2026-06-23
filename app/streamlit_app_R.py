@@ -57,7 +57,7 @@ if uploaded_file:
             # =============================
 
             # Colonnes à garder
-            colonnes_base = ["Manager", "Matricule", "Nom", "Date de visite", "Précision"]
+            colonnes_base = ["Manager", "Matricule", "Nom", "Date de visite", "Aptitude", "Précision"]
 
             # Colonnes ajoutées par le parser
             colonnes_parser = df_result.columns.tolist()
