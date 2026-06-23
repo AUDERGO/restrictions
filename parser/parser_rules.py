@@ -2,6 +2,33 @@ import re
 from .patterns import PATTERNS
 from .utils import normalize, split_phrases
 
+# -------------------------
+# Filtre apte
+# -------------------------
+def analyser_restriction_rules(text, aptitude=None):
+    text = normalize(text)
+ 
+    # ✅ REGLE METIER : si "Apte" → tout à 0
+    if aptitude and re.search(r"\bapte\b", aptitude.lower()):
+        return {
+            "engin_debout": 0,
+            "engin_frontal": 0,
+            "engin_retract": 0,
+            "engin_tous": 0,
+            "limitation_temps_conduite": 0,
+            "Engin": 0,
+            "charge": 0,
+            "poids": None,
+            "posture": 0,
+            "epaule": 0,
+            "dos": 0,
+            "cervicales": 0,
+            "membres_inf": 0,
+            "poignet": 0,
+            "repetitif": 0,
+            "horaire": 0,
+            "total": 0
+            }
 
 # -------------------------
 # HORS PERIMETRE
