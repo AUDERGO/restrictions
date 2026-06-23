@@ -76,7 +76,8 @@ PATTERNS = {
         r"bras en elevation",
         r"au dessus des epaules",
         r"bras au dessus",
-        r"coude"
+        r"coude",
+        r"bras"
     ],
 
     # -------------------------
