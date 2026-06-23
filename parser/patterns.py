@@ -113,7 +113,6 @@ PATTERNS = {
         r"genou",
         r"agenouille",
         r"squat",
-        r"position",
         r"alternance",
         r"assis",
         r"debou?t"
