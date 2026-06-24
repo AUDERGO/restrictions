@@ -47,15 +47,18 @@ if uploaded_file:
     )
 
     if st.button("🚀 Lancer l'extraction"):
-        with st.spinner("Traitement en cours..."):
-
-            # Initialisation à 0 pour tout le monde
-            df_result = pd.DataFrame(0, index=df.index, columns=["résultat"])
+    with st.spinner("Traitement en cours..."):
  
-            # Appliquer le script seulement si ≠ APTE
-            mask = df["Aptitude"] != "APTE"
-            df_result.loc[mask] = df.loc[mask, text_col].apply(analyser_restriction).apply(pd.Series)
-            df_final = pd.concat([df, df_result], axis=1)
+        mask = df["Aptitude"] != "APTE"
+ 
+        df_result_temp = df.loc[mask, text_col].apply(analyser_restriction).apply(pd.Series)
+ 
+        df_result = pd.DataFrame(index=df.index)
+        df_result = df_result.join(df_result_temp)
+ 
+        df_result = df_result.fillna(0)
+ 
+        df_final = pd.concat([df, df_result], axis=1)
 
             # =============================
             # NETTOYAGE DES COLONNES
