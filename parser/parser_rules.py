@@ -126,7 +126,7 @@ def analyser_restriction_rules(text, aptitude=None):
             has_restriction_sp = is_restriction(sp)
 
             # ✅ logique propre
-            is_contrainte_sp = has_restriction or has_neg
+            is_contrainte_sp = has_restriction_sp or has_neg_sp
 
             # -------------------------
             # ENGINS SPECIFIQUES
