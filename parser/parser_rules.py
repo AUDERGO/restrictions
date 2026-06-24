@@ -115,7 +115,7 @@ def analyser_restriction_rules(text, aptitude=None):
         phrase = phrase.strip()
 
         # découpe fine
-        sous_phrases = re.split(r"[.\n,;:-]", phrase)
+        sous_phrases = re.split(r"[.\n,;:]", phrase)
 
         for sp in sous_phrases:
 
