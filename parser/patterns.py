@@ -3,6 +3,22 @@ PATTERNS = {
     # -------------------------
     # ENGINS
     # -------------------------
+    
+    
+    "engin_tous": [
+        r"pas de conduite",
+        r"sans conduite",
+        r"eviction.*engin",
+        r"contre.?indication.*engin",
+        r"contre.?indique.*engin",
+        r"interdit.*engin",
+        r"limite.*conduite",
+        r"conduite.*limit",
+        r"\bengin\b",
+        r"chariot"
+
+    #anciens patterns    
+    """
     "engin_debout": [
         r"[vV]08",
         r"epl",
@@ -26,7 +42,6 @@ PATTERNS = {
         r"chariot\w*\s*[\w\s]*assis"
     ],
  
-
     "engin_tous": [
         r"pas de conduite(?!.*(frontal|retract|debout))",
         r"pas de conduite de chariot automoteur port\w",
@@ -49,8 +64,9 @@ PATTERNS = {
         r"semaine\s+avec",
         r"semaine\s+sans"
        
-    
     ],
+
+    """
 
     # -------------------------
     # CHARGES
