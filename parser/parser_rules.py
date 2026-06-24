@@ -3,34 +3,6 @@ from .patterns import PATTERNS
 from .utils import normalize, split_phrases
 
 # -------------------------
-# Filtre apte
-# -------------------------
-def analyser_restriction_rules(text, aptitude=None):
-    text = normalize(text)
- 
-    # ✅ REGLE METIER : si "Apte" → tout à 0
-    if aptitude and re.search(r"\bapte\b", aptitude.lower()):
-        return {
-            "engin_debout": 0,
-            "engin_frontal": 0,
-            "engin_retract": 0,
-            "engin_tous": 0,
-            "limitation_temps_conduite": 0,
-            "Engin": 0,
-            "charge": 0,
-            "poids": None,
-            "posture": 0,
-            "epaule": 0,
-            "dos": 0,
-            "cervicales": 0,
-            "membres_inf": 0,
-            "poignet": 0,
-            "repetitif": 0,
-            "horaire": 0,
-            "total": 0
-            }
-
-# -------------------------
 # HORS PERIMETRE
 # -------------------------
 def is_hors_perimetre(text):
@@ -61,36 +33,50 @@ def is_restriction(phrase):
     ]
     return any(m in phrase for m in mots)
 
-
 # -------------------------
 # DEBUG (TRÈS UTILE)
 # -------------------------
 def debug_phrase(phrase):
-
     phrase = normalize(phrase)
-
     result = {}
-
     for key, patterns in PATTERNS.items():
-
         matches = []
-
         for p in patterns:
             if re.search(p, phrase):
                 matches.append(p)
-
         if matches:
             result[key] = matches
-
     return result
 
 
 # -------------------------
 # PARSER PRINCIPAL
 # -------------------------
-def analyser_restriction_rules(text):
-
+# Filtre apte
+def analyser_restriction_rules(text, aptitude=None):
     text = normalize(text)
+ 
+    # ✅ REGLE METIER : si "Apte" → tout à 0
+    if aptitude and aptitude.strip().lower() == "apte":
+        return {
+            "engin_debout": 0,
+            "engin_frontal": 0,
+            "engin_retract": 0,
+            "engin_tous": 0,
+            "limitation_temps_conduite": 0,
+            "Engin": 0,
+            "charge": 0,
+            "poids": None,
+            "posture": 0,
+            "epaule": 0,
+            "dos": 0,
+            "cervicales": 0,
+            "membres_inf": 0,
+            "poignet": 0,
+            "repetitif": 0,
+            "horaire": 0,
+            "total": 0
+            }
 
     # EXCLUSION
     if is_hors_perimetre(text):
@@ -212,7 +198,7 @@ def analyser_restriction_rules(text):
         # -------------------------
         # CHARGE  #extraction poids
         # -------------------------
-        if match_any(PATTERNS["charge"], phrase):
+        if match_any(PATTERNS["charge"], phrase) and not match_any(PATTERNS["engin_tous"], phrase):
             if has_neg or has_restriction:
                 res["charge"] = 1
             elif match_any([r"lourd\w*", r"\d+\s*kg"], phrase):
