@@ -147,6 +147,8 @@ def analyser_restriction_rules(text, aptitude=None):
             if match_any(PATTERNS["engin_tous"], sp):
                 if is_contrainte_sp:
                     res["engin_tous"] = 1
+                    res["Engin"] = 1
+
 
             # -------------------------
             # LIMITATION TEMPS ENGINS
