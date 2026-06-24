@@ -17,8 +17,7 @@ st.title("Analyse des restrictions médicales")
 # IMPORT DES MODULES
 # =============================
 try:
-    from parser.parser_rules import analyser_restriction_rules
-    from parser.parser_rules import debug_phrase
+    from parser.parser_rules import analyser_restriction_rules, debug_phrase
 except Exception as e:
     st.error(f"Erreur import modules : {e}")
     st.stop()
@@ -139,7 +138,7 @@ if st.button("🔎 Lancer DEBUG"):
             # ===== 2. RESULTAT PARSER =====
             st.subheader("📊 Résultat parser")
 
-            result = analyser_restriction(debug_input)
+            result = analyser_restriction_rules(debug_input)
 
             if isinstance(result, dict):
                 df_result = pd.DataFrame([result]).T.reset_index()
