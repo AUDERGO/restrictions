@@ -49,7 +49,12 @@ if uploaded_file:
     if st.button("🚀 Lancer l'extraction"):
         with st.spinner("Traitement en cours..."):
 
-            df_result = df[text_col].apply(analyser_restriction).apply(pd.Series)
+            # Initialisation à 0 pour tout le monde
+            df_result = pd.DataFrame(0, index=df.index, columns=["résultat"])
+ 
+            # Appliquer le script seulement si ≠ APTE
+            mask = df["avis_aptitude"] != "APTE"
+            df_result.loc[mask] = df.loc[mask, text_col].apply(analyser_restriction).apply(pd.Series)
             df_final = pd.concat([df, df_result], axis=1)
 
             # =============================
