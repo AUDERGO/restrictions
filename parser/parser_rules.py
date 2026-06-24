@@ -123,36 +123,36 @@ def analyser_restriction_rules(text, aptitude=None):
 
         is_contrainte = (has_neg or has_restriction)
 
-
         # -------------------------
         # ENGINS
         # -------------------------
-        
-        # ✅ mapping propre
+
         engin_map = {
             "engin_frontal": PATTERNS["engin_frontal"],
             "engin_retract": PATTERNS["engin_retract"],
             "engin_debout": PATTERNS["engin_debout"],
         }
 
-        # ✅ découpage local de la phrase
-        sous_phrases = re.split(r",|;", phrase)
+        # découpage petites phrases
+        sous_phrases = re.split(r"[.,;]", phrase)
 
         for sp in sous_phrases:
 
             sp = sp.strip()
 
+            # recalcul propre
             has_neg_sp = match_any(PATTERNS["negation"], sp)
             has_autorisation_sp = match_any(PATTERNS["autorisation"], sp)
             has_restriction_sp = is_restriction(sp)
 
-            is_contrainte_sp = has_neg_sp or has_restriction_sp
+            # CORRECTION IMPORTANTE
+            is_contrainte_sp = has_restriction_sp or (has_neg_sp and not has_autorisation_sp)
 
             for nom_engin, patterns_engin in engin_map.items():
 
                 if match_any(patterns_engin, sp):
 
-                    # ✅ autorisation locale (sur la sous-phrase seulement)
+                    # ✅ autorisation locale uniquement
                     if has_autorisation_sp:
                         continue
 
