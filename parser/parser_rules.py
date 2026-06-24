@@ -209,7 +209,7 @@ def analyser_restriction_rules(text, aptitude=None):
             # HORAIRE
             # -------------------------
             if match_any(PATTERNS["horaire"], sp):
-                res["horaire"] = 1
+                res["horaire"] = max(res["horaire"], 1)
 
     # -------------------------
     # AGREGATION
