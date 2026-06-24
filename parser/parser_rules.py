@@ -29,9 +29,11 @@ def is_restriction(phrase):
     mots = [
         "pas", "contre", "eviter",
         "limite", "limiter", "limitation",
-        "interdit", "sans",
-        "reduction", "restriction"
+        "interdit", "sans", "contre-indication"
+        "reduction", "restriction",
+        "eviction", "exclusion", "proscrit"
     ]
+    
     return any(m in phrase for m in mots)
 
 
@@ -113,7 +115,7 @@ def analyser_restriction_rules(text, aptitude=None):
         phrase = phrase.strip()
 
         # découpe fine
-        sous_phrases = re.split(r"[.,;]", phrase)
+        sous_phrases = re.split(r"[.\n,;:-]", phrase)
 
         for sp in sous_phrases:
 
@@ -131,7 +133,7 @@ def analyser_restriction_rules(text, aptitude=None):
             has_restriction_sp = is_restriction(sp)
 
             # ✅ logique propre
-            is_contrainte_sp = has_restriction_sp or (has_neg_sp and not has_autorisation_sp)
+            is_contrainte_sp = has_restriction or has_neg
 
             # -------------------------
             # ENGINS SPECIFIQUES
