@@ -48,7 +48,7 @@ if uploaded_file:
 
     if st.button("🚀 Lancer l'extraction"):
         with st.spinner("Traitement en cours..."):
-             col_aptitude = df["Aptitude"].str.strip().str.upper()
+            col_aptitude = df["Aptitude"].str.strip().str.upper()
  
             mask = col_aptitude != "APTE"
  
