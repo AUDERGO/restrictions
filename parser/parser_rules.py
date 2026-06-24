@@ -196,7 +196,7 @@ def analyser_restriction_rules(text, aptitude=None):
                 res["cervicales"] = 1
 
             if match_any(PATTERNS["membres_inf"], sp):
-                if is_contrainte_sp or "alternance" in sp:
+                if is_contrainte_sp or re.search(r"altern\w*", sp):
                     res["membres_inf"] = 1
 
             if match_any(PATTERNS["poignet"], sp) and is_contrainte_sp:
