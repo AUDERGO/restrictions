@@ -119,6 +119,13 @@ def analyser_restriction_rules(text, aptitude=None):
 
             sp = sp.strip()
 
+            print("------")
+            print("SP:", sp)
+            print("MATCH engin_tous:", [p for p in PATTERNS["engin_tous"] if re.search(p, sp)])
+            print("MATCH engin_frontal:", [p for p in PATTERNS["engin_frontal"] if re.search(p, sp)])
+            print("MATCH engin_debout:", [p for p in PATTERNS["engin_debout"] if re.search(p, sp)])
+            print("MATCH engin_retract:", [p for p in PATTERNS["engin_retract"] if re.search(p, sp)])
+
             has_neg_sp = match_any(PATTERNS["negation"], sp)
             has_autorisation_sp = match_any(PATTERNS["autorisation"], sp)
             has_restriction_sp = is_restriction(sp)
