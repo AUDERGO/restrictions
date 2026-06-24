@@ -17,7 +17,7 @@ st.title("Analyse des restrictions médicales")
 # IMPORT DES MODULES
 # =============================
 try:
-    from parser.parser_hybrid import analyser_restriction
+    from parser.parser_rules import analyser_restriction_rules
     from parser.parser_rules import debug_phrase
 except Exception as e:
     st.error(f"Erreur import modules : {e}")
@@ -50,7 +50,7 @@ if uploaded_file:
         with st.spinner("Traitement en cours..."):
 
             df_result = df.apply(
-                lambda row: analyser_restriction(row[text_col], row["Aptitude"]),
+                lambda row: analyser_restriction_rules(row[text_col], row["Aptitude"]),
                 axis=1
             ).apply(pd.Series)
 
