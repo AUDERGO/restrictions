@@ -192,7 +192,7 @@ def analyser_restriction_rules(text, aptitude=None):
                 elif re.search(r"charge\w*\s*lourd", sp):
                     res["charge"] = max(res["charge"], 1)
 
-    """
+            """
             # -------------------------
             # CHARGE
             # -------------------------
@@ -210,9 +210,8 @@ def analyser_restriction_rules(text, aptitude=None):
             if match_poids:
                 poids_valeur = int(match_poids.group(1))
                 res["poids"] = poids_valeur if res["poids"] is None else min(res["poids"], poids_valeur)
-"""
+            """
 
-    
             # -------------------------
             # POSTURE
             # -------------------------
