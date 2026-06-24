@@ -3,28 +3,13 @@ PATTERNS = {
     # -------------------------
     # ENGINS
     # -------------------------
-    
-    
-    "engin_tous": [
-        r"pas de conduite",
-        r"sans conduite",
-        r"eviction.*engin",
-        r"contre.?indication.*engin",
-        r"contre.?indique.*engin",
-        r"interdit.*engin",
-        r"limite.*conduite",
-        r"conduite.*limit",
-        r"\bengin\b",
-        r"chariot"
-
-    #anciens patterns    
-    """
     "engin_debout": [
         r"[vV]08",
-        r"epl",
         r"ome",
         r"debou?t",
-        r"position\s*debou?t"
+        r"position\s*debou?t",
+        r"\bepl\b",
+
     ],
 
     "engin_frontal": [
@@ -66,14 +51,11 @@ PATTERNS = {
        
     ],
 
-    """
-
     # -------------------------
     # CHARGES
     # -------------------------
     "charge": [
         r"port de charges?",
-        r"manutention",
         r"charges? lourdes?",
         r"\d+\s*kg",
         r"kg",
