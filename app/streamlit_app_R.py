@@ -47,18 +47,18 @@ if uploaded_file:
     )
 
     if st.button("🚀 Lancer l'extraction"):
-    with st.spinner("Traitement en cours..."):
+        with st.spinner("Traitement en cours..."):
  
-        mask = df["Aptitude"] != "APTE"
+            mask = df["Aptitude"] != "APTE"
  
-        df_result_temp = df.loc[mask, text_col].apply(analyser_restriction).apply(pd.Series)
+            df_result_temp = df.loc[mask, text_col].apply(analyser_restriction).apply(pd.Series)
  
-        df_result = pd.DataFrame(index=df.index)
-        df_result = df_result.join(df_result_temp)
+            df_result = pd.DataFrame(index=df.index)
+            df_result = df_result.join(df_result_temp)
  
-        df_result = df_result.fillna(0)
+            df_result = df_result.fillna(0)
  
-        df_final = pd.concat([df, df_result], axis=1)
+            df_final = pd.concat([df, df_result], axis=1)
 
             # =============================
             # NETTOYAGE DES COLONNES
