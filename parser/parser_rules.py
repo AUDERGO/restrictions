@@ -2,6 +2,7 @@ import re
 from .patterns import PATTERNS
 from .utils import normalize, split_phrases
 
+
 # -------------------------
 # HORS PERIMETRE
 # -------------------------
@@ -33,8 +34,9 @@ def is_restriction(phrase):
     ]
     return any(m in phrase for m in mots)
 
+
 # -------------------------
-# DEBUG (TRÈS UTILE)
+# DEBUG
 # -------------------------
 def debug_phrase(phrase):
     phrase = normalize(phrase)
@@ -52,11 +54,11 @@ def debug_phrase(phrase):
 # -------------------------
 # PARSER PRINCIPAL
 # -------------------------
-# Filtre apte
 def analyser_restriction_rules(text, aptitude=None):
+
     text = normalize(text)
- 
-    # ✅ REGLE METIER : si "Apte" → tout à 0
+
+    # ✅ FILTRE APTE
     if aptitude and aptitude.strip().lower() == "apte":
         return {
             "engin_debout": 0,
@@ -76,9 +78,9 @@ def analyser_restriction_rules(text, aptitude=None):
             "repetitif": 0,
             "horaire": 0,
             "total": 0
-            }
+        }
 
-    # EXCLUSION
+    # ✅ EXCLUSION
     if is_hors_perimetre(text):
         return {k: 0 for k in [
             "engin_debout","engin_frontal","engin_retract","engin_tous",
@@ -93,8 +95,6 @@ def analyser_restriction_rules(text, aptitude=None):
     # -------------------------
     # INIT
     # -------------------------
-    
-    res = {}
     colonnes = [
         "engin_debout","engin_frontal","engin_retract","engin_tous",
         "limitation_temps_conduite","Engin",
@@ -102,163 +102,116 @@ def analyser_restriction_rules(text, aptitude=None):
         "epaule","dos","cervicales","membres_inf","poignet","repetitif",
         "horaire","total"
     ]
-    
-    for col in colonnes:
-        if col == "poids":
-            res[col] = None
-        else:
-            res[col] = 0
 
+    res = {col: (None if col == "poids" else 0) for col in colonnes}
 
     # -------------------------
-    # ANALYSE PAR PHRASE
+    # ANALYSE
     # -------------------------
     for phrase in phrases:
 
         phrase = phrase.strip()
 
-        has_neg = match_any(PATTERNS["negation"], phrase)
-        has_autorisation = match_any(PATTERNS["autorisation"], phrase)
-        has_restriction = is_restriction(phrase)
-
-        is_contrainte = (has_neg or has_restriction)
-
-        # -------------------------
-        # ENGINS
-        # -------------------------
-
-        engin_map = {
-            "engin_frontal": PATTERNS["engin_frontal"],
-            "engin_retract": PATTERNS["engin_retract"],
-            "engin_debout": PATTERNS["engin_debout"],
-        }
-
-        # découpage petites phrases
+        # découpe fine
         sous_phrases = re.split(r"[.,;]", phrase)
 
         for sp in sous_phrases:
 
             sp = sp.strip()
 
-            # recalcul propre
             has_neg_sp = match_any(PATTERNS["negation"], sp)
             has_autorisation_sp = match_any(PATTERNS["autorisation"], sp)
             has_restriction_sp = is_restriction(sp)
 
-            # CORRECTION IMPORTANTE
+            # ✅ logique propre
             is_contrainte_sp = has_restriction_sp or (has_neg_sp and not has_autorisation_sp)
 
+            # -------------------------
+            # ENGINS SPECIFIQUES
+            # -------------------------
+            engin_map = {
+                "engin_frontal": PATTERNS["engin_frontal"],
+                "engin_retract": PATTERNS["engin_retract"],
+                "engin_debout": PATTERNS["engin_debout"],
+            }
+
             for nom_engin, patterns_engin in engin_map.items():
-
                 if match_any(patterns_engin, sp):
-
-                    # ✅ autorisation locale uniquement
-                    if has_autorisation_sp:
-                        continue
-
-                    elif is_contrainte_sp:
+                    if not has_autorisation_sp and is_contrainte_sp:
                         res[nom_engin] = 1
 
-        
-        # === ANCIEN CODE ENGINS (désactivé) ===
-        """           
-        if match_any(PATTERNS["engin_frontal"], phrase):
-            if has_autorisation:
-                pass
-            elif is_contrainte:
-                res["engin_frontal"] = 1
+            # -------------------------
+            # ENGINS GLOBAL
+            # -------------------------
+            if match_any(PATTERNS["engin_tous"], sp):
+                if is_contrainte_sp:
+                    res["engin_tous"] = 1
 
-        if match_any(PATTERNS["engin_retract"], phrase):
-            if has_autorisation:
-                pass
-            elif is_contrainte:
-                res["engin_retract"] = 1
+            # -------------------------
+            # LIMITATION TEMPS ENGINS
+            # -------------------------
+            if match_any(PATTERNS["limitation_temps_conduite"], sp):
 
-        if match_any(PATTERNS["engin_debout"], phrase):
-            if has_autorisation:
-                pass
-            elif is_contrainte:
-                res["engin_debout"] = 1
-        """
+                if (
+                    match_any(PATTERNS["engin_frontal"], sp)
+                    or match_any(PATTERNS["engin_retract"], sp)
+                    or match_any(PATTERNS["engin_debout"], sp)
+                    or match_any(PATTERNS["engin_tous"], sp)
+                ):
+                    if is_contrainte_sp:
+                        res["limitation_temps_conduite"] = 1
 
-        if match_any(PATTERNS["engin_tous"], phrase):
-            if is_contrainte:
-                res["engin_tous"] = 1
+            # -------------------------
+            # CHARGE
+            # -------------------------
+            if match_any(PATTERNS["charge"], sp) and not match_any(PATTERNS["engin_tous"], sp):
+                if is_contrainte_sp:
+                    res["charge"] = 1
+                elif match_any([r"lourd\w*", r"\d+\s*kg"], sp):
+                    res["charge"] = 1
 
-        if match_any(PATTERNS["limitation_temps_conduite"], phrase):
+            # -------------------------
+            # POIDS
+            # -------------------------
+            match_poids = re.search(r"(\d+)\s*kg", sp)
+            if match_poids:
+                poids_valeur = int(match_poids.group(1))
+                res["poids"] = poids_valeur if res["poids"] is None else min(res["poids"], poids_valeur)
 
-            if match_any(PATTERNS["engin_frontal"], phrase) or \
-               match_any(PATTERNS["engin_retract"], phrase) or \
-               match_any(PATTERNS["engin_debout"], phrase) or \
-               match_any(PATTERNS["engin_tous"], phrase):
-
-                if is_contrainte:
-                    res["limitation_temps_conduite"] = 1
-
-        # -------------------------
-        # CHARGE  #extraction poids
-        # -------------------------
-        if match_any(PATTERNS["charge"], phrase) and not match_any(PATTERNS["engin_tous"], phrase):
-            if has_neg or has_restriction:
-                res["charge"] = 1
-            elif match_any([r"lourd\w*", r"\d+\s*kg"], phrase):
-                res["charge"] = 1
-        
-        # extraction poids
-        match_poids = re.search(r"(\d+)\s*kg", phrase)
-        if match_poids:
-            poids_valeur = int(match_poids.group(1))
-            
-            if res["poids"] is None:
-                res["poids"] = poids_valeur
-            else:
-                res["poids"] = min(res["poids"], poids_valeur)
-        
-        # -------------------------
-        # POSTURE DETAIL
-        # -------------------------
-        if match_any(PATTERNS["epaule"], phrase):
-            if has_neg or has_restriction:
+            # -------------------------
+            # POSTURE
+            # -------------------------
+            if match_any(PATTERNS["epaule"], sp) and is_contrainte_sp:
                 res["epaule"] = 1
 
-        if match_any(PATTERNS["dos"], phrase):
-            if has_neg or has_restriction:
+            if match_any(PATTERNS["dos"], sp) and is_contrainte_sp:
                 res["dos"] = 1
 
-        if match_any(PATTERNS["cervicales"], phrase):
-            if has_neg or has_restriction:
+            if match_any(PATTERNS["cervicales"], sp) and is_contrainte_sp:
                 res["cervicales"] = 1
 
-        if match_any(PATTERNS["membres_inf"], phrase):
-            if is_contrainte:
-                res["membres_inf"] = 1
-            elif "alternance" in phrase:
-                 res["membres_inf"] = 1
+            if match_any(PATTERNS["membres_inf"], sp):
+                if is_contrainte_sp or "alternance" in sp:
+                    res["membres_inf"] = 1
 
-        if match_any(PATTERNS["poignet"], phrase):
-            if has_neg or has_restriction:
+            if match_any(PATTERNS["poignet"], sp) and is_contrainte_sp:
                 res["poignet"] = 1
 
-        if match_any(PATTERNS["repetitif"], phrase):
-            if has_neg or has_restriction:
+            if match_any(PATTERNS["repetitif"], sp) and is_contrainte_sp:
                 res["repetitif"] = 1
 
-        # -------------------------
-        # HORAIRE
-        # -------------------------
-        if match_any(PATTERNS["horaire"], phrase):
-            res["horaire"] = 1
-
+            # -------------------------
+            # HORAIRE
+            # -------------------------
+            if match_any(PATTERNS["horaire"], sp):
+                res["horaire"] = 1
 
     # -------------------------
     # AGREGATION
     # -------------------------
-
     if res["membres_inf"] == 1:
         res["engin_debout"] = 1
 
-    
-    # ✅ Engin global
     res["Engin"] = max(
         res["engin_debout"],
         res["engin_frontal"],
@@ -267,7 +220,6 @@ def analyser_restriction_rules(text, aptitude=None):
         res["limitation_temps_conduite"]
     )
 
-    # ✅ Posture globale
     res["posture"] = max(
         res["epaule"],
         res["dos"],
@@ -277,12 +229,6 @@ def analyser_restriction_rules(text, aptitude=None):
         res["repetitif"]
     )
 
-    # ✅ Score total
-    res["total"] = (
-        res["Engin"]
-        + res["charge"]
-        + res["posture"]
-        + res["horaire"]
-    )
+    res["total"] = res["Engin"] + res["charge"] + res["posture"] + res["horaire"]
 
     return res
