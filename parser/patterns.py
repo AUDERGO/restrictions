@@ -36,7 +36,8 @@ PATTERNS = {
         r"ponctuel\w*",
         r"reste\s*ponctuel",
         r"doit\s*rester\s*exceptionnel",
-        r"contre.?indication.*conduite"
+        r"contre.?indication.*conduite",
+        r"eviction.*conduite.*engin"
     ],
 
     "limitation_temps_conduite": [
