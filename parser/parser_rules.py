@@ -120,13 +120,18 @@ def analyser_restriction_rules(text, aptitude=None):
         for sp in sous_phrases:
 
             sp = sp.strip()
+            
+            # ETAPE 1 : filtrer faux positifs
+            if "pas de contre indication" in sp or "pas de contre-indication" in sp:
+                continue
 
             has_neg_sp = match_any(PATTERNS["negation"], sp)
             has_autorisation_sp = match_any(PATTERNS["autorisation"], sp)
             has_restriction_sp = is_restriction(sp)
 
-            # ✅ logique propre
+            # ETAPE 2 : calcul vraie contrainte
             is_contrainte_sp = has_restriction_sp or has_neg_sp
+
 
             # -------------------------
             # ENGINS SPECIFIQUES
@@ -156,23 +161,18 @@ def analyser_restriction_rules(text, aptitude=None):
             # LIMITATION TEMPS ENGINS
             # -------------------------
             if match_any(PATTERNS["limitation_temps_conduite"], sp):
+                if is_contrainte_sp:
+                    res["limitation_temps_conduite"] = 1
 
-                if (
-                    match_any(PATTERNS["engin_frontal"], sp)
-                    or match_any(PATTERNS["engin_retract"], sp)
-                    or match_any(PATTERNS["engin_debout"], sp)
-                    or match_any(PATTERNS["engin_tous"], sp)
-                ):
-                    if is_contrainte_sp:
-                        res["limitation_temps_conduite"] = 1
 
             # -------------------------
             # CHARGE
             # -------------------------
-            if match_any(PATTERNS["charge"], sp) and not match_any(PATTERNS["engin_tous"], sp):
+
+            if match_any(PATTERNS["charge"], sp) 
                 if is_contrainte_sp:
                     res["charge"] = 1
-                elif match_any([r"lourd\w*", r"\d+\s*kg"], sp):
+                elif re.search(r"\d+\s*kg", sp):
                     res["charge"] = 1
 
             # -------------------------
