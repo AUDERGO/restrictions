@@ -137,9 +137,10 @@ def analyser_restriction_rules(text, aptitude=None):
 
             for nom_engin, patterns_engin in engin_map.items():
                 if match_any(patterns_engin, sp):
-                    if not has_autorisation_sp and is_contrainte_sp:
+                    if is_contrainte_sp:
                         res[nom_engin] = 1
 
+            
             # -------------------------
             # ENGINS GLOBAL
             # -------------------------
