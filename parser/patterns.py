@@ -108,7 +108,6 @@ PATTERNS = {
     # -------------------------
     "membres_inf": [
         r"station\s*debou?t",
-        r"marche",
         r"accroup",
         r"genou",
         r"agenouille",
