@@ -166,6 +166,34 @@ def analyser_restriction_rules(text, aptitude=None):
 
 
             # -------------------------
+            # CHARGE + POIDS
+            # -------------------------
+
+            # EXTRACTION POIDS (prioritaire et indépendante)
+            match_poids = re.search(r"(\d+)\s*(kg|kilo\w*|kilogramm\w*)", sp)
+
+            if match_poids:
+                poids_valeur = int(match_poids.group(1))
+
+                #  toujours prendre la valeur la plus restrictive (minimum)
+                res["poids"] = poids_valeur if res["poids"] is None else min(res["poids"], poids_valeur)
+
+                # poids implique automatiquement une contrainte
+                res["charge"] = max(res["charge"], 1)
+
+            # DETECTION CHARGE (sans poids)
+            if match_any(PATTERNS["charge"], sp):
+
+                # cas restriction explicite
+                if is_contrainte_sp:
+                    res["charge"] = max(res["charge"], 1)
+
+                # cas implicite (charges lourdes sans "pas")
+                elif re.search(r"charge\w*\s*lourd", sp):
+                    res["charge"] = max(res["charge"], 1)
+
+    """
+            # -------------------------
             # CHARGE
             # -------------------------
 
@@ -182,7 +210,9 @@ def analyser_restriction_rules(text, aptitude=None):
             if match_poids:
                 poids_valeur = int(match_poids.group(1))
                 res["poids"] = poids_valeur if res["poids"] is None else min(res["poids"], poids_valeur)
+"""
 
+    
             # -------------------------
             # POSTURE
             # -------------------------
