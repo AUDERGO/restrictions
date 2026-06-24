@@ -178,7 +178,7 @@ def analyser_restriction_rules(text, aptitude=None):
             # -------------------------
             # POIDS
             # -------------------------
-            match_poids = re.search(r"(\d+)\s*kg", sp)
+            match_poids = re.search(r"(\d+)\s*(kg|kilo\w*)", sp)
             if match_poids:
                 poids_valeur = int(match_poids.group(1))
                 res["poids"] = poids_valeur if res["poids"] is None else min(res["poids"], poids_valeur)
