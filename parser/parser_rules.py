@@ -169,7 +169,7 @@ def analyser_restriction_rules(text, aptitude=None):
             # CHARGE
             # -------------------------
 
-            if match_any(PATTERNS["charge"], sp) 
+            if match_any(PATTERNS["charge"], sp):
                 if is_contrainte_sp:
                     res["charge"] = 1
                 elif re.search(r"\d+\s*kg", sp):
