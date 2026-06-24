@@ -48,8 +48,9 @@ if uploaded_file:
 
     if st.button("🚀 Lancer l'extraction"):
         with st.spinner("Traitement en cours..."):
+             col_aptitude = df["Aptitude"].str.strip().str.upper()
  
-            mask = df["Aptitude"] != "APTE"
+            mask = col_aptitude != "APTE"
  
             df_result_temp = df.loc[mask, text_col].apply(analyser_restriction).apply(pd.Series)
  
