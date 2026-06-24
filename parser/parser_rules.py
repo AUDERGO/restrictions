@@ -161,8 +161,8 @@ def analyser_restriction_rules(text, aptitude=None):
             # LIMITATION TEMPS ENGINS
             # -------------------------
             if match_any(PATTERNS["limitation_temps_conduite"], sp):
-                if is_contrainte_sp:
-                    res["limitation_temps_conduite"] = 1
+                res["limitation_temps_conduite"] = 1
+                res["Engin"] = 1   # une limitation implique Engin
 
 
             # -------------------------
