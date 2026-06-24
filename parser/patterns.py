@@ -23,7 +23,7 @@ PATTERNS = {
 
     "engin_retract": [
         r"[vV]?r.?tract\w*",        
-        r"[vV]?lat\.?ra\w*",      
+        r"lat[eé]ral\w*",     
         r"chariot\w*\s*[\w\s]*assis"
     ],
  
