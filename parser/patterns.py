@@ -69,6 +69,9 @@ PATTERNS = {
         r"pas de port de charges?",
         r"eviction du port de charges?",
         r"contre.?indication.*charges?"
+        r"manutention\w*",
+        r"limitation.*manutention",
+        r"limiter.*manutention"
     ],
     
 
