@@ -48,7 +48,11 @@ PATTERNS = {
         rf"{ENGINS}.*\d+\s*h",
         rf"{ENGINS}.*\d+\s*heures?",
         rf"{ENGINS}.*max",
-        rf"{ENGINS}.*%"
+        rf"{ENGINS}.*%",
+        r"altern\w*.*conduite",
+        r"semaine\s+avec\s+conduite",
+        r"semaine\s+sans\s+conduite"
+
     ],
 
     
