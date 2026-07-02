@@ -179,8 +179,8 @@ def analyser_restriction_rules(text, aptitude=None):
                         continue
                     if is_restriction_engin_sp:
                         res[nom_engin] = 1
-
-           if (
+            
+            if (
                 re.search(
                     r"conduite.*(exceptionnel|occasionnel|ponctuel)",
                     sp
