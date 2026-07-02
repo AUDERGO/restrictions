@@ -41,7 +41,16 @@ PATTERNS = {
     ],
 
     "limitation_temps_conduite": [
-        r"(?:conduite|chariot|engin|v08|frontal|rétractable|ome|teag).{0,50}(?:\d+\s*h|\d+\s*heures?|max(?:imum)?|limit\w*|durée)"   
+        r"conduite.*limit",
+        r"conduite.*max",
+        r"conduite.*\d+\s*h",
+        r"conduite.*\d+\s*heures?",
+        r"conduite.*%",
+        r"conduite.*exceptionnel",
+        r"conduite.*occasionnel",
+        r"conduite.*ponctuel",
+        r"semaine\s+avec\s+conduite",
+        r"semaine\s+sans\s+conduite"
     ],
 
     
