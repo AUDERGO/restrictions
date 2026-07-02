@@ -178,16 +178,19 @@ def analyser_restriction_rules(text, aptitude=None):
                     if is_limitation_temps:
                         continue
                     if is_restriction_engin_sp:
-                        res[nom_engin] = 1   
-                        
-            """
-            for nom_engin, patterns_engin in engin_map.items():
-                if match_any(patterns_engin, sp):
-                    if is_limitation_temps:
-                        continue
-                    if is_contrainte_sp:
                         res[nom_engin] = 1
-            """
+
+           if (
+                re.search(
+                    r"conduite.*(exceptionnel|occasionnel|ponctuel)",
+                    sp
+                )
+                and not match_any(PATTERNS["engin_debout"], sp)
+                and not match_any(PATTERNS["engin_frontal"], sp)
+                and not match_any(PATTERNS["engin_retract"], sp)
+            ):
+                res["engin_tous"] = 1
+                res["Engin"] = 1
 
             
             # -------------------------
@@ -197,19 +200,6 @@ def analyser_restriction_rules(text, aptitude=None):
                 if not is_limitation_temps and is_restriction_engin_sp:
                     res["engin_tous"] = 1
                     res["Engin"] = 1
-
-            """
-            if match_any(PATTERNS["engin_tous"], sp):
-                if is_interdiction_engin_sp:
-                    res["engin_tous"] = 1
-                    res["Engin"] = 1      
-    
-
-            if match_any(PATTERNS["engin_tous"], sp):
-                if not is_limitation_temps and is_contrainte_sp:
-                    res["engin_tous"] = 1
-                    res["Engin"] = 1
-            """
 
 
             # -------------------------
