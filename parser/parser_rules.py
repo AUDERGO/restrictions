@@ -48,7 +48,12 @@ def is_restriction_engin(phrase):
         "contre indication",
         "contre-indication",
         "eviction",
-        "exclusion"
+        "exclusion",
+        "exceptionnel",
+        "occasionnel",
+        "ponctuel",
+        "doit rester exceptionnelle",
+        "doit rester exceptionnel"
     ]
 
     phrase = phrase.lower()
