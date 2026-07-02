@@ -36,20 +36,24 @@ def is_restriction(phrase):
     
     return any(m in phrase for m in mots)
 
-def is_interdiction_engin(phrase):
+# -------------------------
+# RESTRICTION FORTE ENGIN
+# -------------------------
+def is_restriction_engin(phrase):
 
     mots = [
-        "pas de conduite",
+        "pas de",
+        "sans",
+        "interdit",
         "contre indication",
         "contre-indication",
-        "interdit",
-        "sans conduite",
         "eviction",
-        "exclusion",
-        "proscrit"
+        "exclusion"
     ]
 
-    return any(m in phrase for m in mots)
+    phrase = phrase.lower()
+
+    return any(mot in phrase for mot in mots)
 
 
 # -------------------------
@@ -166,8 +170,10 @@ def analyser_restriction_rules(text, aptitude=None):
 
             for nom_engin, patterns_engin in engin_map.items():
                 if match_any(patterns_engin, sp):
-                    if is_interdiction_engin_sp:
-                        res[nom_engin] = 1      
+                    if is_limitation_temps:
+                        continue
+                    if is_restriction_engin_sp:
+                        res[nom_engin] = 1   
                         
             """
             for nom_engin, patterns_engin in engin_map.items():
@@ -183,11 +189,17 @@ def analyser_restriction_rules(text, aptitude=None):
             # ENGINS GLOBAL
             # -------------------------
             if match_any(PATTERNS["engin_tous"], sp):
-                if is_interdiction_engin_sp:
+                if not is_limitation_temps and is_restriction_engin_sp:
                     res["engin_tous"] = 1
-                    res["Engin"] = 1            
+                    res["Engin"] = 1
 
             """
+            if match_any(PATTERNS["engin_tous"], sp):
+                if is_interdiction_engin_sp:
+                    res["engin_tous"] = 1
+                    res["Engin"] = 1      
+    
+
             if match_any(PATTERNS["engin_tous"], sp):
                 if not is_limitation_temps and is_contrainte_sp:
                     res["engin_tous"] = 1
