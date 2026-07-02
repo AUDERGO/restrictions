@@ -29,11 +29,26 @@ def is_restriction(phrase):
     mots = [
         "pas", "contre", "eviter",
         "limite", "limiter", "limitation",
-        "interdit", "sans", "contre-indication"
+        "interdit", "sans", "contre-indication",
         "reduction", "restriction",
         "eviction", "exclusion", "proscrit"
     ]
     
+    return any(m in phrase for m in mots)
+
+def is_interdiction_engin(phrase):
+
+    mots = [
+        "pas de conduite",
+        "contre indication",
+        "contre-indication",
+        "interdit",
+        "sans conduite",
+        "eviction",
+        "exclusion",
+        "proscrit"
+    ]
+
     return any(m in phrase for m in mots)
 
 
@@ -132,6 +147,8 @@ def analyser_restriction_rules(text, aptitude=None):
             # ETAPE 2 : calcul vraie contrainte
             is_contrainte_sp = has_restriction_sp or has_neg_sp
 
+            is_interdiction_engin_sp = is_interdiction_engin(sp)
+
             is_limitation_temps = match_any(
                 PATTERNS["limitation_temps_conduite"],
                 sp
@@ -149,19 +166,33 @@ def analyser_restriction_rules(text, aptitude=None):
 
             for nom_engin, patterns_engin in engin_map.items():
                 if match_any(patterns_engin, sp):
+                    if is_interdiction_engin_sp:
+                        res[nom_engin] = 1      
+                        
+            """
+            for nom_engin, patterns_engin in engin_map.items():
+                if match_any(patterns_engin, sp):
                     if is_limitation_temps:
                         continue
                     if is_contrainte_sp:
                         res[nom_engin] = 1
+            """
 
             
             # -------------------------
             # ENGINS GLOBAL
             # -------------------------
             if match_any(PATTERNS["engin_tous"], sp):
+                if is_interdiction_engin_sp:
+                    res["engin_tous"] = 1
+                    res["Engin"] = 1            
+
+            """
+            if match_any(PATTERNS["engin_tous"], sp):
                 if not is_limitation_temps and is_contrainte_sp:
                     res["engin_tous"] = 1
                     res["Engin"] = 1
+            """
 
 
             # -------------------------
