@@ -151,7 +151,7 @@ def analyser_restriction_rules(text, aptitude=None):
             # ETAPE 2 : calcul vraie contrainte
             is_contrainte_sp = has_restriction_sp or has_neg_sp
 
-            is_interdiction_engin_sp = is_interdiction_engin(sp)
+            is_restriction_engin_sp = is_restriction_engin(sp)
 
             is_limitation_temps = match_any(
                 PATTERNS["limitation_temps_conduite"],
