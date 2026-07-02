@@ -282,6 +282,9 @@ def analyser_restriction_rules(text, aptitude=None):
             if match_any(PATTERNS["membres_inf"], sp):
                 if is_contrainte_sp or re.search(r"altern\w*", sp):
                     res["membres_inf"] = 1
+            
+            if match_any(PATTERNS["assis"], sp):
+                res["membres_inf"] = 1
 
             if match_any(PATTERNS["poignet"], sp) and is_contrainte_sp:
                 res["poignet"] = 1
@@ -300,6 +303,9 @@ def analyser_restriction_rules(text, aptitude=None):
     # -------------------------
     if res["membres_inf"] == 1:
         res["engin_debout"] = 1
+
+    if res["cervicales"] == 1:
+        res["engin_retract"] = 1
 
     res["Engin"] = max(
         res["engin_debout"],
