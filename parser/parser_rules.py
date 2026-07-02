@@ -132,6 +132,11 @@ def analyser_restriction_rules(text, aptitude=None):
             # ETAPE 2 : calcul vraie contrainte
             is_contrainte_sp = has_restriction_sp or has_neg_sp
 
+            is_limitation_temps = match_any(
+                PATTERNS["limitation_temps_conduite"],
+                sp
+            )
+
 
             # -------------------------
             # ENGINS SPECIFIQUES
@@ -144,6 +149,8 @@ def analyser_restriction_rules(text, aptitude=None):
 
             for nom_engin, patterns_engin in engin_map.items():
                 if match_any(patterns_engin, sp):
+                    if is_limitation_temps:
+                        continue
                     if is_contrainte_sp:
                         res[nom_engin] = 1
 
@@ -152,7 +159,7 @@ def analyser_restriction_rules(text, aptitude=None):
             # ENGINS GLOBAL
             # -------------------------
             if match_any(PATTERNS["engin_tous"], sp):
-                if is_contrainte_sp:
+                if not is_limitation_temps and is_contrainte_sp:
                     res["engin_tous"] = 1
                     res["Engin"] = 1
 
