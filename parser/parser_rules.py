@@ -180,7 +180,12 @@ def analyser_restriction_rules(text, aptitude=None):
                 PATTERNS["limitation_temps_conduite"],
                 sp
             )
-            
+
+            print("SP =", sp)
+                    print("NEG =", has_neg_sp)
+            print("RESTR =", has_restriction_sp)
+            print("CONTRAINTE =", is_contrainte_sp)
+            print("ENGIN_RESTR =", is_restriction_engin_sp)
 
             # -------------------------
             # ENGINS SPECIFIQUES
