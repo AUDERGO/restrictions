@@ -27,7 +27,7 @@ def match_any(patterns, text):
 # -------------------------
 def is_restriction(phrase):
     mots = [
-        "pas de", "evit\w*", "contre indication",
+        "pas de", "eviter", "contre indication",
         "limite", "limiter", "limitation",
         "interdit", "sans", "contre-indication",
         "reduction", "restriction",
@@ -145,47 +145,24 @@ def analyser_restriction_rules(text, aptitude=None):
 
             sp = sp.strip()
             
-            sp_sans_contre_indication = re.sub(
-                r"pas de contre[- ]?indication",
-                "",
-                sp,
-                flags=re.IGNORECASE
-            )
+            # ETAPE 1 : filtrer faux positifs
+            if "pas de contre indication" in sp or "pas de contre-indication" in sp:
+                continue
 
-            has_neg_sp = match_any(
-                PATTERNS["negation"],
-                sp_sans_contre_indication
-            )
+            has_neg_sp = match_any(PATTERNS["negation"], sp)
+            has_autorisation_sp = match_any(PATTERNS["autorisation"], sp)
+            has_restriction_sp = is_restriction(sp)
 
-            has_restriction_sp = is_restriction(
-                sp_sans_contre_indication
-            )
+            # ETAPE 2 : calcul vraie contrainte
+            is_contrainte_sp = has_restriction_sp or has_neg_sp
 
-            is_restriction_engin_sp = is_restriction_engin(
-                sp_sans_contre_indication
-            )
-
-            # autorisation à conserver sur la phrase d'origine
-            has_autorisation_sp = match_any(
-                PATTERNS["autorisation"],
-                sp
-            )
-
-            is_contrainte_sp = (
-                has_restriction_sp
-                or has_neg_sp
-            )
+            is_restriction_engin_sp = is_restriction_engin(sp)
 
             is_limitation_temps = match_any(
                 PATTERNS["limitation_temps_conduite"],
                 sp
             )
 
-            print("SP =", sp)
-                    print("NEG =", has_neg_sp)
-            print("RESTR =", has_restriction_sp)
-            print("CONTRAINTE =", is_contrainte_sp)
-            print("ENGIN_RESTR =", is_restriction_engin_sp)
 
             # -------------------------
             # ENGINS SPECIFIQUES
