@@ -41,16 +41,20 @@ PATTERNS = {
     ],
 
     "limitation_temps_conduite": [
-        r"\d+\s*h",
+        r"(?:conduite|chariot|engin|v08|frontal|rétractable|ome|teag).{0,50}(?:\d+\s*h|\d+\s*heures?|max(?:imum)?|limit\w*|durée)"   
+    ],
+
+
+    """
+     r"\d+\s*h",
         r"\d+\s*heures?",
         r"\b\d+h\b",
         r"max\w*",
         r"maximum",
         r"semaine\s+avec",
         r"semaine\s+sans"
-       
-    ],
-
+    """
+    
     # -------------------------
     # CHARGES
     # -------------------------
