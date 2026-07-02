@@ -40,17 +40,14 @@ PATTERNS = {
         r"eviction.*engin"
     ],
 
-    "limitation_temps_conduite": [
-        r"conduite.*limit",
-        r"conduite.*max",
-        r"conduite.*\d+\s*h",
-        r"conduite.*\d+\s*heures?",
-        r"conduite.*%",
-        r"conduite.*exceptionnel",
-        r"conduite.*occasionnel",
-        r"conduite.*ponctuel",
-        r"semaine\s+avec\s+conduite",
-        r"semaine\s+sans\s+conduite"
+    ENGINS = r"(?:conduite|chariot|engin|v08|frontal|rétractable|retractable|ome|teag)"
+
+    "limitation_temps_conduite": [ 
+        rf"{ENGINS}.*limit",
+        rf"{ENGINS}.*\d+\s*h",
+        rf"{ENGINS}.*\d+\s*heures?",
+        rf"{ENGINS}.*max",
+        rf"{ENGINS}.*%"
     ],
 
     
