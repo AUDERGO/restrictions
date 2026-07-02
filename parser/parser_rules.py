@@ -145,24 +145,42 @@ def analyser_restriction_rules(text, aptitude=None):
 
             sp = sp.strip()
             
-            # ETAPE 1 : filtrer faux positifs
-            if "pas de contre indication" in sp or "pas de contre-indication" in sp:
-                continue
+            sp_sans_contre_indication = re.sub(
+                r"pas de contre[- ]?indication",
+                "",
+                sp,
+                flags=re.IGNORECASE
+            )
 
-            has_neg_sp = match_any(PATTERNS["negation"], sp)
-            has_autorisation_sp = match_any(PATTERNS["autorisation"], sp)
-            has_restriction_sp = is_restriction(sp)
+            has_neg_sp = match_any(
+                PATTERNS["negation"],
+                sp_sans_contre_indication
+            )
 
-            # ETAPE 2 : calcul vraie contrainte
-            is_contrainte_sp = has_restriction_sp or has_neg_sp
+            has_restriction_sp = is_restriction(
+                sp_sans_contre_indication
+            )
 
-            is_restriction_engin_sp = is_restriction_engin(sp)
+            is_restriction_engin_sp = is_restriction_engin(
+                sp_sans_contre_indication
+            )
+
+            # autorisation à conserver sur la phrase d'origine
+            has_autorisation_sp = match_any(
+                PATTERNS["autorisation"],
+                sp
+            )
+
+            is_contrainte_sp = (
+                has_restriction_sp
+                or has_neg_sp
+            )
 
             is_limitation_temps = match_any(
                 PATTERNS["limitation_temps_conduite"],
                 sp
             )
-
+            
 
             # -------------------------
             # ENGINS SPECIFIQUES
