@@ -27,7 +27,7 @@ def match_any(patterns, text):
 # -------------------------
 def is_restriction(phrase):
     mots = [
-        "pas de", "eviter", "contre indication",
+        "pas de", "evit\w*", "contre indication",
         "limite", "limiter", "limitation",
         "interdit", "sans", "contre-indication",
         "reduction", "restriction",
