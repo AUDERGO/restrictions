@@ -125,6 +125,19 @@ PATTERNS = {
         r"debou?t"
     ],
 
+    "assis": [
+        r"altern\w*.*assis.*debout",
+        r"altern\w*.*debout.*assis",
+        r"position\s+assise",
+        r"station\s+assise",
+        r"assis[- ]debout",
+        r"doit\s+pouvoir\s+s.?asseoir",
+        r"repos\s+assis",
+        r"si[eè]ge\s+à\s+disposition",
+        r"position\s+assise\s+pr[eé]pond[eé]rante",
+        r"station\s+assise\s+exclusive"
+    ],
+
     # -------------------------
     # POIGNET
     # -------------------------
