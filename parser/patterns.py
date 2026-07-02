@@ -33,11 +33,6 @@ PATTERNS = {
         r"pas de conduite(?!.*(frontal|retract|debout))",
         r"pas de conduite de chariot automoteur port\w",
         r"sans conduite de chariot automoteur port\w",
-        r"exceptionnel\w*",
-        r"occasionnel\w*",
-        r"ponctuel\w*",
-        r"reste\s*ponctuel",
-        r"doit\s*rester\s*exceptionnel",
         r"contre.?indication.*conduite",
         r"eviction.*engin"
     ],
