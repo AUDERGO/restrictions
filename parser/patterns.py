@@ -1,3 +1,5 @@
+ENGINS = r"(?:conduite|chariot|engin|v08|frontal|rétractable|retractable|ome|teag)"
+
 PATTERNS = {
 
     # -------------------------
@@ -39,8 +41,7 @@ PATTERNS = {
         r"contre.?indication.*conduite",
         r"eviction.*engin"
     ],
-
-    ENGINS = r"(?:conduite|chariot|engin|v08|frontal|rétractable|retractable|ome|teag)"
+    
 
     "limitation_temps_conduite": [ 
         rf"{ENGINS}.*limit",
